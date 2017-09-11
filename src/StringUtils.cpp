@@ -19,8 +19,14 @@ std::vector<std::string> StringUtils::split(std::string &s,
     size_t next;
     size_t last = 0;
     std::string aResult;
+    bool is_finished = false;
 
-    while ((next = s.find(delimiter, last)) != std::string::npos) {
+    while (!is_finished) {
+        if ((next = s.find(delimiter, last)) == std::string::npos) {
+            next = s.length();
+            is_finished = true;
+        }
+
         if (next > last) {
             aResult = s.substr(last, next - last);
             aResult = trim(aResult);
@@ -28,24 +34,25 @@ std::vector<std::string> StringUtils::split(std::string &s,
             if (aResult.compare("") != 0) {
                 result.push_back(aResult);
             }
-
-            last = next + delimiter.length();
         }
+        last = next + delimiter.length();
     }
     return result;
 }
 
-std::string StringUtils::ltrim(const std::string& str) {
+std::string StringUtils::ltrim(const std::string & str) {
     const std::string pattern = " ";
+
     return str.substr(str.find_first_not_of(pattern));
 }
 
-std::string StringUtils::rtrim(const std::string& str) {
+std::string StringUtils::rtrim(const std::string & str) {
     const std::string pattern = " ";
+
     return str.substr(0, str.find_last_not_of(pattern) + 1);
 }
 
-std::string StringUtils::trim(const std::string& str) {
+std::string StringUtils::trim(const std::string & str) {
     return StringUtils::ltrim(StringUtils::rtrim(str));
 }
 

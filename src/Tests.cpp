@@ -75,8 +75,6 @@ void testEcho() {
     string ifilename("input.txt");
     string ofilename("output.txt");
     Command *cmd = new Command(ifilename, ofilename, false);
-    string to_print("texto lindo");
-    cmd->echo(to_print);
     cmd->echo();
 
     delete(cmd);

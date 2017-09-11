@@ -18,9 +18,6 @@ int runCommand(string, string, bool, string);
 
 int main(int argc, char** argv) {
 
-    //stringUtilsTest();
-    //commandTest();
-
     /* * Recorrer los parametros
      * * Una vez identificados los parámetros de construcción del comando
      * inicial.
@@ -45,24 +42,27 @@ int main(int argc, char** argv) {
         } else if (param.compare(OPT_DEBUG) == 0) {
             is_debug = true;
         } else {
-            pipeline_params += " " + param;
+            pipeline_params += param;
+            if (i < argc - 1) {
+                pipeline_params += PARAM_SEPARATOR;
+            }
         }
     }
 
     return runCommand(input, output, is_debug, pipeline_params);
 }
 
-int runCommand(string in, string out, bool is_dbg, string params) {
+int runCommand(string infile, string outfile, bool is_dbg, string params) {
     Command *command;
 
-    if (in == "" && out == "") {
+    if (infile == "" && outfile == "") {
         command = new Command(cin, cout, is_dbg);
-    } else if (in != "" && out == "") {
-        command = new Command(in, cout, is_dbg);
-    } else if (in == "" && out != "") {
-        command = new Command(cin, out, is_dbg);
+    } else if (infile != "" && outfile == "") {
+        command = new Command(infile, cout, is_dbg);
+    } else if (infile == "" && outfile != "") {
+        command = new Command(cin, outfile, is_dbg);
     } else {
-        command = new Command(in, out, is_dbg);
+        command = new Command(infile, outfile, is_dbg);
     }
 
     command->pipeline(params);
