@@ -3,7 +3,6 @@
 #include <string>
 
 #include "Command.h"
-#include "Tests.h"
 
 using std::istream;
 using std::string;
@@ -65,7 +64,8 @@ int runCommand(string infile, string outfile, bool is_dbg, string params) {
         command = new Command(infile, outfile, is_dbg);
     }
 
-    command->pipeline(params);
+    //command->pipeline(params);
+    delete command;
 
     return EXIT_SUCCESS;
 }
