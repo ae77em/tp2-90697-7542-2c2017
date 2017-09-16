@@ -8,21 +8,26 @@
 
 using std::string;
 using std::vector;
+using std::ostream;
+using std::istream;
 
 class CommandMatch : public Command {
+private:
+    string pattern;
 public:
-    CommandMatch(istream& is, ostream& os, bool is_dbg);
-    CommandMatch(istream& is, string filename, bool is_dbg);
-    CommandMatch(string filename, ostream& os, bool is_dbg);
-    CommandMatch(string ifilename, string ofilename, bool is_dbg);
+    CommandMatch();
+    CommandMatch(vector<string> args, bool is_dbg);
     CommandMatch(const CommandMatch& orig) = delete;
     virtual ~CommandMatch();
     
-    int run(vector<string> args);
+    int run();
     string to_string();
+        
+protected:    
+    void initialize();
     
 private:    
-    void do_match(string pattern);
+    void do_match();
 };
 
 #endif /* MATCH_H */

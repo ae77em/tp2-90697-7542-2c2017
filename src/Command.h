@@ -7,43 +7,44 @@
 #include <memory>
 #include <queue>
 
-#include "StringUtils.h"
-
 using std::istream;
 using std::ostream;
 using std::function;
 using std::string;
 using std::unique_ptr;
 using std::queue;
-
-#define PARAM_SEPARATOR "#|#"
+using std::vector;
 
 class Command {
 
 private:
     string previous_buffer;
     int pos_in_pipe = 0;
-    int cont_echo = 0;
-    int cont_match = 0;
-    int cont_replace = 0;
-    
+        
 protected:
-    unique_ptr<istream, function<void(istream*)>> input;
-    unique_ptr<ostream, function<void(ostream*)>> output;
+    string input;
+    string output;
+    vector<string> arguments;
     bool is_debug;
     int counter;
     string intermediate_buffer;
        
 public:
-    Command(istream& is, ostream& os, bool is_dbg);
-    Command(istream& is, string filename, bool is_dbg);
-    Command(string filename, ostream& os, bool is_dbg);
-    Command(string ifilename, string ofilename, bool is_dbg);
-    Command(const Command& orig) = delete;
+    Command();
+    Command(vector<string> args, bool is_dbg);
+    Command(const Command& orig);
     virtual ~Command();
     
-    virtual int run(std::vector<string> args);
+    virtual int run();
     virtual string to_string();
+
+    bool get_is_debug() const;
+    void set_is_debug(bool is_debug);
+    vector<string> get_arguments() const;
+    string get_input() const;
+    void set_input(string input);
+    string get_output() const;
+    void set_output(string output);
     
 protected:
     void print_cont();
@@ -52,8 +53,12 @@ protected:
     void print_intermediate_buffer();
     void set_previous_buffer_for_debug();
     
-private:
-    void initialize();
+    int get_counter() const;
+    void set_counter(int counter);
+    string get_intermediate_buffer() const;
+    void set_intermediate_buffer(string intermediate_buffer);
+        
+    void initialize();    
 };
 
 #endif /* COMMANDS_H */

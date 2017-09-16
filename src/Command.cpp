@@ -1,5 +1,4 @@
 #include "Command.h"
-#include "InstantiationsCounter.h"
 
 #include <string>
 #include <iostream>
@@ -13,55 +12,15 @@ using std::cin;
 using std::cerr;
 using std::vector;
 
-#define PIPELINE_DELIMITER "::"
-
-Command::Command(istream& is = std::cin,
-        ostream& os = std::cout,
-        bool is_dbg = false)
-: input(&is, [](istream*) {
-})
-, output(&os, [](ostream*) {
-})
-
-, is_debug(is_dbg) {
+Command::Command() {
 }
 
-Command::Command(istream& is, string filename, bool is_dbg = false) :
-input(&is, [](istream*) {
-})
+Command::Command(const Command& orig) {
 
-,
-output(new std::ofstream(filename), std::default_delete<std::ostream>()),
-is_debug(is_dbg) {
-    if (!dynamic_cast<std::ofstream&> (*output).is_open()) {
-        // manejo de errores de apertura (!!!)
-    }
 }
 
-Command::Command(string filename, ostream& os, bool is_dbg = false) :
-input(new std::ifstream(filename), std::default_delete<std::istream>()),
-output(&os, [](ostream*) {
-})
-
-, is_debug(is_dbg) {
-    if (!dynamic_cast<std::ifstream&> (*input).is_open()) {
-        // manejo de errores de apertura (!!!)
-    }
-}
-
-Command::Command(string ifilename, string ofilename, bool is_dbg = false)
-: input(new std::ifstream(ifilename), std::default_delete<std::istream>()),
-output(new std::ofstream(ofilename), std::default_delete<std::ostream>()),
-is_debug(is_dbg) {
-
-    if (!dynamic_cast<std::ifstream&> (*input).is_open()) {
-        // manejo de errores de apertura (!!!)
-    }
-
-    if (!dynamic_cast<std::ofstream&> (*output).is_open()) {
-        // manejo de errores de apertura (!!!)
-    }
-
+Command::Command(vector<string> args, bool is_dbg)
+: arguments(args), is_debug(is_dbg) {
 }
 
 Command::~Command() {
@@ -75,32 +34,6 @@ string Command::get_wrong_params_size_msg(string command) {
     return command + ": cantidad de parámetros incorrecta.";
 }
 
-void pipeline(string commands) {
-    //    istream &in = dynamic_cast<istream&> (*input);
-    //    ostream &out = dynamic_cast<ostream&> (*output);
-    //    vector<string> cmds = StringUtils::split(commands, PIPELINE_DELIMITER);
-    //    vector<string> splitted_cmd;
-    //    string cmd;
-    //
-    //    while (std::getline(in, intermediate_buffer)) {
-    //        for (string &entire_cmd : cmds) {
-    //            print_pos_in_pipe();
-    //            splitted_cmd = StringUtils::split(entire_cmd, PARAM_SEPARATOR);
-    //            cmd = splitted_cmd.at(0);
-    //            vector<string> args(splitted_cmd.begin() + 1, splitted_cmd.end());
-    //
-    //            this->run(cmd, args);
-    //        }
-    //
-    //        pos_in_pipe = 0;
-    //
-    //        if (intermediate_buffer.compare("") != 0) {
-    //            out << intermediate_buffer << std::endl;
-    //            out.flush();
-    //        }
-    //    }
-}
-
 void Command::print_pos_in_pipe() {
     if (is_debug) {
         pos_in_pipe++;
@@ -108,12 +41,16 @@ void Command::print_pos_in_pipe() {
     }
 }
 
-int Command::run(std::vector<string> args) {
+int Command::run() {
     return 0;
 }
 
 string Command::to_string() {
     return "base command";
+}
+
+vector<string> Command::get_arguments() const {
+    return arguments;
 }
 
 void Command::print_cont() {
@@ -134,3 +71,42 @@ void Command::set_previous_buffer_for_debug() {
     }
 }
 
+int Command::get_counter() const {
+    return counter;
+}
+
+void Command::set_counter(int counter) {
+    this->counter = counter;
+}
+
+string Command::get_intermediate_buffer() const {
+    return intermediate_buffer;
+}
+
+void Command::set_intermediate_buffer(string intermediate_buffer) {
+    this->intermediate_buffer = intermediate_buffer;
+}
+
+bool Command::get_is_debug() const {
+    return is_debug;
+}
+
+void Command::set_is_debug(bool is_dbg) {
+    this->is_debug = is_dbg;
+}
+
+string Command::get_input() const {
+    return this->input;
+}
+
+void Command::set_input(string input) {
+    this->input = input;
+}
+
+string Command::get_output() const {
+    return this->output;
+}
+
+void Command::set_output(string output) {
+    this->output = output;
+}

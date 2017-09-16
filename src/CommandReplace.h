@@ -11,19 +11,24 @@ using std::string;
 using std::vector;
 
 class CommandReplace : public Command {
+    string pattern;
+    string replacement;
+    
 public:
-    CommandReplace(istream& is, ostream& os, bool is_dbg);
-    CommandReplace(istream& is, string filename, bool is_dbg);
-    CommandReplace(string filename, ostream& os, bool is_dbg);
-    CommandReplace(string ifilename, string ofilename, bool is_dbg);
+    CommandReplace();
+    CommandReplace(vector<string> args, bool is_dbg);
     CommandReplace(const CommandReplace& orig) = delete;
     virtual ~CommandReplace();
     
-    int run(vector<string> args);
+    int run();
     string to_string();
-        
+    
+protected:    
+    void initialize();
+    
 private:
-    void do_replace(string pattern, string replacement);
+    void do_replace();
+    
 };
 
 #endif /* REPLACE_H */

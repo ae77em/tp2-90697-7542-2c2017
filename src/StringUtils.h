@@ -10,7 +10,7 @@ public:
     StringUtils(const StringUtils& orig);
     virtual ~StringUtils();
     
-    static std::vector<std::string> split(  std::string &s,
+    static std::vector<std::string> split(  const std::string &s,
                                             const std::string &delimiters);
     static std::string ltrim(const std::string &s);
     static std::string rtrim(const std::string &s);

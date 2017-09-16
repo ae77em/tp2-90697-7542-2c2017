@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 
-#include "Command.h"
+#include "Pipeline.h"
 
 using std::istream;
 using std::string;
@@ -13,7 +13,7 @@ using std::cout;
 #define OPT_OUTPUT "--output"
 #define OPT_DEBUG "--debug"
 
-int runCommand(string, string, bool, string);
+int runPipeline(string, string, bool, string);
 
 int main(int argc, char** argv) {
 
@@ -48,24 +48,24 @@ int main(int argc, char** argv) {
         }
     }
 
-    return runCommand(input, output, is_debug, pipeline_params);
+    return runPipeline(input, output, is_debug, pipeline_params);
 }
 
-int runCommand(string infile, string outfile, bool is_dbg, string params) {
-    Command *command;
+int runPipeline(string infile, string outfile, bool is_dbg, string params) {
+    Pipeline *pipeline;
 
     if (infile == "" && outfile == "") {
-        command = new Command(cin, cout, is_dbg);
+        pipeline = new Pipeline(cin, cout, is_dbg, params);
     } else if (infile != "" && outfile == "") {
-        command = new Command(infile, cout, is_dbg);
+        pipeline = new Pipeline(infile, cout, is_dbg, params);
     } else if (infile == "" && outfile != "") {
-        command = new Command(cin, outfile, is_dbg);
+        pipeline = new Pipeline(cin, outfile, is_dbg, params);
     } else {
-        command = new Command(infile, outfile, is_dbg);
+        pipeline = new Pipeline(infile, outfile, is_dbg, params);
     }
 
-    //command->pipeline(params);
-    delete command;
+    pipeline->run();
+    delete pipeline;
 
     return EXIT_SUCCESS;
 }

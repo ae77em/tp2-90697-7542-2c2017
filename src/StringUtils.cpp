@@ -13,7 +13,7 @@ StringUtils::StringUtils(const StringUtils& orig) {
 StringUtils::~StringUtils() {
 }
 
-std::vector<std::string> StringUtils::split(std::string &s,
+std::vector<std::string> StringUtils::split(const std::string &s,
         const std::string &delimiter) {
     std::vector<std::string> result;
     size_t next;

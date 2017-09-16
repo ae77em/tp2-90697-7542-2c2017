@@ -8,18 +8,21 @@
 
 using std::string;
 using std::vector;
+using std::ostream;
+using std::istream;
 
 class CommandEcho : public Command {
 public:
-    CommandEcho(istream& is, ostream& os, bool is_dbg);
-    CommandEcho(istream& is, string filename, bool is_dbg);
-    CommandEcho(string filename, ostream& os, bool is_dbg);
-    CommandEcho(string ifilename, string ofilename, bool is_dbg);
+    CommandEcho();
+    CommandEcho(vector<string> args, bool is_dbg);
     CommandEcho(const CommandEcho& orig) = delete;
     virtual ~CommandEcho();
     
-    int run(vector<string> args);
+    int run();
     string to_string();
+        
+protected:    
+    void initialize();
     
 private:    
     void do_echo();    
