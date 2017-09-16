@@ -1,17 +1,7 @@
 #include "Pipeline.h"
-#include "StringUtils.h"
 
-#include <string>
-#include <iostream>
-#include <fstream>
 #include <vector>
-#include <regex>
-
-using std::string;
-using std::cout;
-using std::cin;
-using std::cerr;
-using std::vector;
+#include <string>
 
 Pipeline::Pipeline(istream& is = std::cin,
         ostream& os = std::cout,
@@ -37,7 +27,7 @@ input(&is, [](istream*) {
 output(new std::ofstream(filename), std::default_delete<std::ostream>()),
 is_debug(is_dbg) {
     if (!dynamic_cast<std::ofstream&> (*output).is_open()) {
-        // manejo de errores de apertura (!!!)
+        throw exception();
     }
 
     initialize(cmds);
@@ -53,7 +43,7 @@ output(&os, [](ostream*) {
 
 , is_debug(is_dbg) {
     if (!dynamic_cast<std::ifstream&> (*input).is_open()) {
-        // manejo de errores de apertura (!!!)
+        throw exception();
     }
 
     initialize(cmds);
@@ -66,13 +56,13 @@ Pipeline::Pipeline(string ifilename,
 : input(new std::ifstream(ifilename), std::default_delete<std::istream>()),
 output(new std::ofstream(ofilename), std::default_delete<std::ostream>()),
 is_debug(is_dbg) {
-
     if (!dynamic_cast<std::ifstream&> (*input).is_open()) {
-        // manejo de errores de apertura (!!!)
+        throw exception();
     }
 
     if (!dynamic_cast<std::ofstream&> (*output).is_open()) {
-        // manejo de errores de apertura (!!!)
+        dynamic_cast<std::ifstream&> (*input).close();
+        throw exception();
     }
 
     initialize(cmds);
@@ -94,7 +84,13 @@ void Pipeline::initialize(const string &cmds) {
     }
 }
 
+bool is_deleted(Command *command) {
+    delete command;
+    return true;
+}
+
 Pipeline::~Pipeline() {
+    commands.remove_if(is_deleted);
 }
 
 void Pipeline::run() {

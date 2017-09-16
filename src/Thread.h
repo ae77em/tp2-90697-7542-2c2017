@@ -19,7 +19,6 @@ public:
 
 private:
     std::thread thread;
-
 };
 
 #endif /* THREAD_H */

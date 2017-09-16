@@ -9,6 +9,7 @@
 #include <iostream>
 #include <memory>
 #include <list>
+#include <exception>
 
 using std::istream;
 using std::ostream;
@@ -17,6 +18,7 @@ using std::string;
 using std::unique_ptr;
 using std::list;
 using std::vector;
+using std::exception;
 
 #define PARAM_SEPARATOR "#|#"
 #define PIPELINE_DELIMITER "::"

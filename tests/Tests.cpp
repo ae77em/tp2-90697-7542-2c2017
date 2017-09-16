@@ -4,6 +4,7 @@
 #include <cassert>
 #include <iostream>
 #include <vector>
+#include <string>
 
 static void ltrimTest() {
     std::string aaa("aaa ");
@@ -50,7 +51,8 @@ static void trimTest() {
 static void splitTest() {
     std::string toBeSplitted(" aa :: bb :: cc :: ");
     std::string delimiter = "::";
-    std::vector<std::string> splittedValues = StringUtils::split(toBeSplitted, delimiter);
+    std::vector<std::string> splittedValues
+            = StringUtils::split(toBeSplitted, delimiter);
     const std::vector<std::string> values({"aa", "bb", "cc"});
 
     for (unsigned int i = 0; i < splittedValues.size(); i++) {
@@ -74,10 +76,8 @@ void testEcho() {
 
     string ifilename("input.txt");
     string ofilename("output.txt");
-    Command *cmd = new Command(ifilename, ofilename, false);
-    cmd->echo();
-
-    delete(cmd);
+    Pipeline pipeline(ifilename, ofilename, false, "echo");
+    pipeline.run();
 
     std::cout << "Finaliza test echo...\n";
 }
@@ -87,12 +87,9 @@ void testMatch() {
 
     string ifilename("input.txt");
     string ofilename("output.txt");
-    Command *cmd = new Command(ifilename, ofilename, false);
+    Pipeline pipeline(ifilename, ofilename, false, "match (tra)(.*)");
 
-    string regex("(tra)(.*)");
-    cmd->match(regex);
-
-    delete(cmd);
+    pipeline.run();
 
     std::cout << "Finaliza test match...\n";
 }
@@ -102,17 +99,14 @@ void testReplace() {
 
     string ifilename("input.txt");
     string ofilename("output.txt");
-    Command *cmd = new Command(ifilename, ofilename, false);
+    Pipeline pipeline(ifilename, ofilename, false, "replace \\b(e) E");
 
-    string regex("\\b(e)");
-    cmd->replace(regex, "O");
-
-    delete(cmd);
+    pipeline.run();
 
     std::cout << "Finaliza test replace...\n";
 }
 
-void commandTest() {
+void pipelineTest() {
     testEcho();
     testMatch();
     testReplace();

@@ -16,7 +16,6 @@ Command::Command() {
 }
 
 Command::Command(const Command& orig) {
-
 }
 
 Command::Command(vector<string> args, bool is_dbg)

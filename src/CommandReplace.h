@@ -28,7 +28,6 @@ protected:
     
 private:
     void do_replace();
-    
 };
 
 #endif /* REPLACE_H */

@@ -1,5 +1,8 @@
 #include "CommandReplace.h"
 
+#include <vector>
+#include <string>
+
 /*
  * Uso un singleton para contar la cantidad de comandos que ejecuté. Dejo la
  * la clase dentro de la misma implementación del comando ya que se usa sola-
@@ -7,6 +10,7 @@
  */
 class CounterReplaceSingleton {
 public:
+    // comentario para que ande cpplint
 
     static CounterReplaceSingleton& instance() {
         static CounterReplaceSingleton instance;
@@ -18,6 +22,7 @@ public:
     }
 
 private:
+    // comentario para que ande cpplint
 
     CounterReplaceSingleton() {
     }

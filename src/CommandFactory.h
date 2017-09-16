@@ -6,8 +6,13 @@
 #include "CommandMatch.h"
 #include "CommandReplace.h"
 
+#include <string>
+#include <vector>
+
 using std::ostream;
 using std::istream;
+using std::string;
+using std::vector;
 
 class CommandFactory {
 private:

@@ -1,5 +1,8 @@
 #include "CommandFactory.h"
 
+#include <string>
+#include <vector>
+
 CommandEcho* CommandFactory::createEcho(vector<string> args, bool is_dbg) {
     return new CommandEcho(args, is_dbg);
 }
@@ -8,7 +11,8 @@ CommandMatch* CommandFactory::createMatch(vector<string> args, bool is_dbg) {
     return new CommandMatch(args, is_dbg);
 }
 
-CommandReplace* CommandFactory::createReplace(vector<string> args, bool is_dbg) {
+CommandReplace* CommandFactory::createReplace(vector<string> args,
+        bool is_dbg) {
     return new CommandReplace(args, is_dbg);
 }
 
@@ -17,7 +21,8 @@ Command* CommandFactory::create(vector<string> args, bool is_dbg) {
     return NULL;
 }
 
-Command* CommandFactory::createCommand(string cmd, vector<string> args, bool is_dbg) {
+Command* CommandFactory::createCommand(string cmd, vector<string> args,
+        bool is_dbg) {
     if (cmd.compare("echo") == 0) {
         return createEcho(args, is_dbg);
     } else if (cmd.compare("replace") == 0) {

@@ -1,6 +1,8 @@
 #include "CommandMatch.h"
 
 #include <regex>
+#include <string>
+#include <vector>
 
 /*
  * Uso un singleton para contar la cantidad de comandos que ejecuté. Dejo la
@@ -9,6 +11,7 @@
  */
 class CounterMatchSingleton {
 public:
+    // comentario para que ande cpplint
 
     static CounterMatchSingleton& instance() {
         static CounterMatchSingleton instance;
@@ -20,6 +23,7 @@ public:
     }
 
 private:
+    // comentario para que ande cpplint
 
     CounterMatchSingleton() {
     }

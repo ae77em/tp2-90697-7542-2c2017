@@ -5,18 +5,16 @@
 #include <fstream>
 #include <iostream>
 #include <memory>
-#include <queue>
+#include <vector>
 
 using std::istream;
 using std::ostream;
 using std::function;
 using std::string;
 using std::unique_ptr;
-using std::queue;
 using std::vector;
 
 class Command {
-
 private:
     string previous_buffer;
     int pos_in_pipe = 0;

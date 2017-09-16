@@ -16,13 +16,6 @@ using std::cout;
 int runPipeline(string, string, bool, string);
 
 int main(int argc, char** argv) {
-
-    /* * Recorrer los parametros
-     * * Una vez identificados los parámetros de construcción del comando
-     * inicial.
-     * * Esplitear los otros comandos.
-     */
-
     string param;
     string input = "";
     string output = "";
