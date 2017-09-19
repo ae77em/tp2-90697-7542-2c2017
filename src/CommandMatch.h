@@ -20,7 +20,7 @@ public:
     CommandMatch(const CommandMatch& orig) = delete;
     virtual ~CommandMatch();
     
-    int run();
+    void run();
     string to_string();
         
 protected:    

@@ -2,6 +2,9 @@
 
 #include <thread>
 
+Thread::Thread() {
+}
+
 Thread::Thread(Thread&& other) {
     this->thread = std::move(other.thread);
 }

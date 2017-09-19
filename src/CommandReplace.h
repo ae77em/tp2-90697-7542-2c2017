@@ -20,7 +20,7 @@ public:
     CommandReplace(const CommandReplace& orig) = delete;
     virtual ~CommandReplace();
     
-    int run();
+    void run();
     string to_string();
     
 protected:    

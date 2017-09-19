@@ -41,7 +41,7 @@ threads = si
 CFLAGS = -Wall -Werror -pedantic -pedantic-errors
 
 # Para optimizar el binario resultante lo mejor posible
-CFLAGS += -O0
+CFLAGS += -O3
 
 # Para valgrind o debug
 CFLAGS += -ggdb -DDEBUG -fno-inline
@@ -149,23 +149,3 @@ $(target): $(o_files)
 clean:
 	$(RM) $(o_files) $(target)
 
-
-
-# build tests
-build-tests: .build-tests-post
-
-.build-tests-pre:
-# Add your pre 'build-tests' code here...
-
-.build-tests-post: .build-tests-impl
-# Add your post 'build-tests' code here...
-
-
-# run tests
-test: .test-post
-
-.test-pre:
-# Add your pre 'test' code here...
-
-.test-post: .test-impl
-# Add your post 'test' code here...

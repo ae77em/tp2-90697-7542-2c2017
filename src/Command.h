@@ -1,11 +1,15 @@
-#ifndef COMMANDS_H
-#define COMMANDS_H
+#ifndef COMMAND_H
+#define COMMAND_H
+
+#include "Thread.h"
+#include "IntermediateResultProtected.h"
 
 #include <string>
 #include <fstream>
 #include <iostream>
 #include <memory>
 #include <vector>
+#include <mutex>
 
 using std::istream;
 using std::ostream;
@@ -13,19 +17,21 @@ using std::function;
 using std::string;
 using std::unique_ptr;
 using std::vector;
+using std::mutex;
 
-class Command {
+class Command : public Thread {
 private:
-    string previous_buffer;
     int pos_in_pipe = 0;
         
 protected:
+    mutex my_mutex;
     string input;
     string output;
     vector<string> arguments;
     bool is_debug;
     int counter;
-    string intermediate_buffer;
+    //IntermediateResultProtected previous_buffer;
+    //IntermediateResultProtected next_buffer;
        
 public:
     Command();
@@ -33,7 +39,7 @@ public:
     Command(const Command& orig);
     virtual ~Command();
     
-    virtual int run();
+    void run();
     virtual string to_string();
 
     bool get_is_debug() const;
@@ -45,6 +51,10 @@ public:
     void set_output(string output);
     
 protected:
+    void initialize();
+    
+    void wait_for_input();
+    
     void print_cont();
     string get_wrong_params_size_msg(string command);
     void print_pos_in_pipe();
@@ -53,11 +63,9 @@ protected:
     
     int get_counter() const;
     void set_counter(int counter);
-    string get_intermediate_buffer() const;
-    void set_intermediate_buffer(string intermediate_buffer);
-        
-    void initialize();    
+    string get_previous_buffer_data() const;
+    void set_intermediate_buffer(string intermediate_buffer);        
 };
 
-#endif /* COMMANDS_H */
+#endif /* COMMAND_H */
 

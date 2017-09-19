@@ -18,7 +18,7 @@ public:
     CommandEcho(const CommandEcho& orig) = delete;
     virtual ~CommandEcho();
     
-    int run();
+    void run();
     string to_string();
         
 protected:    

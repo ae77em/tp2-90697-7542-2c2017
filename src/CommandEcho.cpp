@@ -2,6 +2,11 @@
 
 #include <string>
 #include <vector>
+#include <mutex>
+#include <condition_variable>
+
+using std::mutex;
+using std::condition_variable;
 
 /*
  * Uso un singleton para contar la cantidad de comandos que ejecuté. Dejo la
@@ -56,9 +61,8 @@ void CommandEcho::initialize() {
     set_counter(counter);
 }
 
-int CommandEcho::run() {
+void CommandEcho::run() {
     do_echo();
-    return EXIT_SUCCESS;
 }
 
 string CommandEcho::to_string() {
@@ -66,8 +70,25 @@ string CommandEcho::to_string() {
 }
 
 void CommandEcho::do_echo() {
-    output = input;
-    print_cont();
-    set_previous_buffer_for_debug();
-    print_intermediate_buffer();
+
+    //    while (previous_buffer.is_processing_yet()) {
+    //
+    //        mutex &m = previous_buffer.get_mutex();
+    //        condition_variable &cv = previous_buffer.get_condition_variable();
+    //
+    //        Lock l(m, cv);
+    //        l->set_ready(previous_buffer.has_output());
+    //
+    //        cv.wait(lk, [] {
+    //            return previous_buffer.has_output();
+    //        });
+    //
+    //        output = input = previous_buffer.get_next_intermediate_result();
+    //
+    //        next_buffer.add_intermediate_result(output);
+    //
+    //        //print_cont();
+    //        //set_previous_buffer_for_debug();
+    //        //print_intermediate_buffer();
+    //    }
 }

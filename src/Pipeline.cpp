@@ -2,6 +2,11 @@
 
 #include <vector>
 #include <string>
+#include <thread>
+
+using std::vector;
+using std::string;
+using std::thread;
 
 Pipeline::Pipeline(istream& is = std::cin,
         ostream& os = std::cout,

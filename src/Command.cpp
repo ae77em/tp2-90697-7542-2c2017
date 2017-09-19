@@ -12,10 +12,10 @@ using std::cin;
 using std::cerr;
 using std::vector;
 
-Command::Command() {
+Command::Command() : Thread() {
 }
 
-Command::Command(const Command& orig) {
+Command::Command(const Command& orig) : Thread() {
 }
 
 Command::Command(vector<string> args, bool is_dbg)
@@ -29,6 +29,18 @@ void Command::initialize() {
     //  counter = InstantiationsCounter::instance()
 }
 
+void Command::wait_for_input() {
+    //    std::unique_lock<std::mutex> lk(my_mutex);
+    //    cv.wait(lk, [] {
+    //        return ready;
+    //    });
+    //
+    //    // acá tengo que procesar....
+    //
+    //    lk.unlock();
+    //    cv.notify_one();
+}
+
 string Command::get_wrong_params_size_msg(string command) {
     return command + ": cantidad de parámetros incorrecta.";
 }
@@ -40,8 +52,7 @@ void Command::print_pos_in_pipe() {
     }
 }
 
-int Command::run() {
-    return 0;
+void Command::run() {
 }
 
 string Command::to_string() {
@@ -60,14 +71,14 @@ void Command::print_cont() {
 
 void Command::print_intermediate_buffer() {
     if (is_debug) {
-        cerr << previous_buffer << " -> " << intermediate_buffer << std::endl;
+        cerr << input << " -> " << output << std::endl;
     }
 }
 
 void Command::set_previous_buffer_for_debug() {
-    if (is_debug) {
-        previous_buffer = intermediate_buffer;
-    }
+    //    if (is_debug) {
+    //        previous_buffer = intermediate_buffer;
+    //    }
 }
 
 int Command::get_counter() const {
@@ -78,12 +89,13 @@ void Command::set_counter(int counter) {
     this->counter = counter;
 }
 
-string Command::get_intermediate_buffer() const {
-    return intermediate_buffer;
+string Command::get_previous_buffer_data() const {
+    //    return previous_buffer.get_next_intermediate_result();
+    return "";
 }
 
 void Command::set_intermediate_buffer(string intermediate_buffer) {
-    this->intermediate_buffer = intermediate_buffer;
+    //    this->intermediate_buffer = intermediate_buffer;
 }
 
 bool Command::get_is_debug() const {

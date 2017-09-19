@@ -61,18 +61,14 @@ string CommandMatch::to_string() {
     return "match";
 }
 
-int CommandMatch::run() {
-    int status = EXIT_SUCCESS;
-
+void CommandMatch::run() {
     if (get_arguments().size() == 1) {
         pattern = get_arguments().at(0);
         do_match();
     } else {
-        status = EXIT_FAILURE;
         std::cerr << get_wrong_params_size_msg(to_string());
+        throw get_wrong_params_size_msg(to_string());
     }
-
-    return status;
 }
 
 void CommandMatch::do_match() {

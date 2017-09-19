@@ -56,19 +56,15 @@ void CommandReplace::initialize() {
     set_counter(counter);
 }
 
-int CommandReplace::run() {
-    int status = EXIT_SUCCESS;
-
+void CommandReplace::run() {
     if (get_arguments().size() == 2) {
         pattern = get_arguments().at(0);
         replacement = get_arguments().at(1);
         do_replace();
     } else {
-        status = EXIT_FAILURE;
         std::cerr << get_wrong_params_size_msg("replace");
+        throw get_wrong_params_size_msg("replace");
     }
-
-    return status;
 }
 
 void CommandReplace::do_replace() {
