@@ -33,3 +33,6 @@
 Makefile
 nbproject/
 src/tp
+.idea/
+CMake*
+cmake*/

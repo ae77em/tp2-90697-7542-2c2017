@@ -15,19 +15,21 @@ class CommandReplace : public Command {
     string replacement;
     
 public:
-    CommandReplace();
-    CommandReplace(vector<string> args, bool is_dbg);
-    CommandReplace(const CommandReplace& orig) = delete;
+    CommandReplace(vector<string> args, 
+        bool is_dbg, 
+        IntermediateBuffer &previous_buffer,
+        IntermediateBuffer &next_buffer);
     virtual ~CommandReplace();
     
-    void run();
+    void do_command();
     string to_string();
     
 protected:    
     void initialize();
     
 private:
-    void do_replace();
+    CommandReplace() = delete;
+    CommandReplace(const CommandReplace& orig) = delete;
 };
 
 #endif /* REPLACE_H */

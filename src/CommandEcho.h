@@ -13,9 +13,10 @@ using std::istream;
 
 class CommandEcho : public Command {
 public:
-    CommandEcho();
-    CommandEcho(vector<string> args, bool is_dbg);
-    CommandEcho(const CommandEcho& orig) = delete;
+    CommandEcho(vector<string> args, 
+                bool is_dbg,
+                IntermediateBuffer &previous_buffer,
+                IntermediateBuffer &next_buffer);
     virtual ~CommandEcho();
     
     void run();
@@ -23,9 +24,11 @@ public:
         
 protected:    
     void initialize();
+    void do_command();
     
-private:    
-    void do_echo();    
+private:
+    CommandEcho() = delete;
+    CommandEcho(const CommandEcho& orig) = delete;    
 };
 
 #endif /* ECHO_H */

@@ -2,7 +2,7 @@
 #define COMMAND_H
 
 #include "Thread.h"
-#include "IntermediateResultProtected.h"
+#include "IntermediateBuffer.h"
 
 #include <string>
 #include <fstream>
@@ -10,6 +10,7 @@
 #include <memory>
 #include <vector>
 #include <mutex>
+#include <condition_variable>
 
 using std::istream;
 using std::ostream;
@@ -18,25 +19,29 @@ using std::string;
 using std::unique_ptr;
 using std::vector;
 using std::mutex;
+using std::condition_variable;
 
 class Command : public Thread {
 private:
     int pos_in_pipe = 0;
         
 protected:
-    mutex my_mutex;
+    mutex m;
+    condition_variable cv;
     string input;
     string output;
     vector<string> arguments;
     bool is_debug;
     int counter;
-    //IntermediateResultProtected previous_buffer;
-    //IntermediateResultProtected next_buffer;
+    bool buffer_is_ready;
+    IntermediateBuffer &previous_buffer;
+    IntermediateBuffer &next_buffer;
        
 public:
-    Command();
-    Command(vector<string> args, bool is_dbg);
-    Command(const Command& orig);
+    Command(vector<string> args, 
+            bool is_dbg, 
+            IntermediateBuffer &previous_buffer,
+            IntermediateBuffer &next_buffer);
     virtual ~Command();
     
     void run();
@@ -49,12 +54,19 @@ public:
     void set_input(string input);
     string get_output() const;
     void set_output(string output);
+    void set_buffer_is_ready(bool ir);
+    bool is_ready();    
+    void load_in_next_buffer(string str);
+    string get_from_previous_buffer();
+        
+private:
+    Command() = delete;
+    Command(const Command& orig) = delete;
     
 protected:
+    virtual void do_command() = 0;
     void initialize();
-    
-    void wait_for_input();
-    
+        
     void print_cont();
     string get_wrong_params_size_msg(string command);
     void print_pos_in_pipe();

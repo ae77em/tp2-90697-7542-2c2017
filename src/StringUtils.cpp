@@ -1,8 +1,6 @@
 #include "StringUtils.h"
 
 #include <cstddef>
-#include <string>
-#include <vector>
 
 StringUtils::StringUtils() {
 }

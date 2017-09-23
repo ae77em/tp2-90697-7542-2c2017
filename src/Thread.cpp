@@ -1,7 +1,5 @@
 #include "Thread.h"
 
-#include <thread>
-
 Thread::Thread() {
 }
 

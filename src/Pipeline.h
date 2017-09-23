@@ -3,6 +3,7 @@
 
 #include "CommandFactory.h"
 #include "StringUtils.h"
+#include "IntermediateBuffer.h"
 
 #include <string>
 #include <fstream>

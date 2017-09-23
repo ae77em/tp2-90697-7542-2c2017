@@ -1,37 +1,32 @@
 #include "Pipeline.h"
 
-#include <vector>
-#include <string>
-#include <thread>
-
 using std::vector;
 using std::string;
 using std::thread;
 
-Pipeline::Pipeline(istream& is = std::cin,
-        ostream& os = std::cout,
+Pipeline::Pipeline(istream &is = std::cin,
+        ostream &os = std::cout,
         bool is_dbg = false,
         const string &cmds = "")
-: input(&is, [](istream*) {
-})
-, output(&os, [](ostream*) {
+: input(&is, [](istream *) {
+}), output(&os, [](ostream *) {
 })
 
 , is_debug(is_dbg) {
     initialize(cmds);
 }
 
-Pipeline::Pipeline(istream& is,
+Pipeline::Pipeline(istream &is,
         string filename,
         bool is_dbg = false,
-        const string& cmds = "") :
-input(&is, [](istream*) {
+        const string &cmds = "") :
+input(&is, [](istream *) {
 })
 
 ,
 output(new std::ofstream(filename), std::default_delete<std::ostream>()),
 is_debug(is_dbg) {
-    if (!dynamic_cast<std::ofstream&> (*output).is_open()) {
+    if (!dynamic_cast<std::ofstream &> (*output).is_open()) {
         throw exception();
     }
 
@@ -39,15 +34,15 @@ is_debug(is_dbg) {
 }
 
 Pipeline::Pipeline(string filename,
-        ostream& os,
+        ostream &os,
         bool is_dbg = false,
-        const string& cmds = "") :
+        const string &cmds = "") :
 input(new std::ifstream(filename), std::default_delete<std::istream>()),
-output(&os, [](ostream*) {
+output(&os, [](ostream *) {
 })
 
 , is_debug(is_dbg) {
-    if (!dynamic_cast<std::ifstream&> (*input).is_open()) {
+    if (!dynamic_cast<std::ifstream &> (*input).is_open()) {
         throw exception();
     }
 
@@ -57,16 +52,16 @@ output(&os, [](ostream*) {
 Pipeline::Pipeline(string ifilename,
         string ofilename,
         bool is_dbg = false,
-        const string& cmds = "")
+        const string &cmds = "")
 : input(new std::ifstream(ifilename), std::default_delete<std::istream>()),
 output(new std::ofstream(ofilename), std::default_delete<std::ostream>()),
 is_debug(is_dbg) {
-    if (!dynamic_cast<std::ifstream&> (*input).is_open()) {
+    if (!dynamic_cast<std::ifstream &> (*input).is_open()) {
         throw exception();
     }
 
-    if (!dynamic_cast<std::ofstream&> (*output).is_open()) {
-        dynamic_cast<std::ifstream&> (*input).close();
+    if (!dynamic_cast<std::ofstream &> (*output).is_open()) {
+        dynamic_cast<std::ifstream &> (*input).close();
         throw exception();
     }
 
@@ -78,14 +73,23 @@ void Pipeline::initialize(const string &cmds) {
     vector<string> splitted_cmd;
 
     string cmd;
+    string entire_cmd;
 
-    for (string &entire_cmd : cmds_list) {
+    IntermediateBuffer previous;
+
+    for (int i = 0; i < (int) cmds_list.size(); ++i) {
+        IntermediateBuffer next;
+
+        entire_cmd = cmds_list.at(i);
         splitted_cmd = StringUtils::split(entire_cmd, PARAM_SEPARATOR);
         cmd = splitted_cmd.at(0);
         vector<string> args(splitted_cmd.begin() + 1, splitted_cmd.end());
 
-        Command *command = CommandFactory::createCommand(cmd, args, is_debug);
+        Command *command = CommandFactory::createCommand(cmd, args, is_debug, previous, next);
+
         commands.push_back(command);
+
+        previous = next;
     }
 }
 
@@ -99,19 +103,30 @@ Pipeline::~Pipeline() {
 }
 
 void Pipeline::run() {
-    istream &in = dynamic_cast<istream&> (*input);
-    ostream &out = dynamic_cast<ostream&> (*output);
+    istream &in = dynamic_cast<istream &> (*input);
+    //ostream &out = dynamic_cast<ostream &> (*output);
 
     string intermediate_buffer;
     string current_input;
+    std::vector<Thread*> threads;
+    Command *command = commands.front();
 
     while (std::getline(in, intermediate_buffer)) {
-        current_input = intermediate_buffer;
-        for (Command *c : commands) {
-            c->set_input(current_input);
-            c->run();
-            out << c->get_output() << std::endl;
-            current_input = c->get_output();
-        }
+        command->load_in_next_buffer(intermediate_buffer);
     }
+
+    for (Command *c : commands) {
+        threads.push_back(c);
+    }
+
+    for (Thread *t : threads) {
+        t->start();
+    }
+
+    for (int i = 0; i < (int) commands.size(); ++i) {
+        threads[i]->join();
+        delete threads[i];
+    }
+
+
 }

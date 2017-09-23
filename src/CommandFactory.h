@@ -16,17 +16,33 @@ using std::vector;
 
 class CommandFactory {
 private:
-    static CommandEcho* createEcho(vector<string> args, bool is_dbg);
-    static CommandMatch* createMatch(vector<string> args, bool is_dbg);
-    static CommandReplace* createReplace(vector<string> args, bool is_dbg);
-    static Command* create(vector<string> args, bool is_dbg);
+    static CommandEcho* createEcho(vector<string> args, 
+            bool is_dbg,
+            IntermediateBuffer &previous, 
+            IntermediateBuffer &next);
+    static CommandMatch* createMatch(vector<string> args, 
+            bool is_dbg,
+            IntermediateBuffer &previous, 
+            IntermediateBuffer &next);
+    static CommandReplace* createReplace(vector<string> args, 
+            bool is_dbg,
+            IntermediateBuffer &previous, 
+            IntermediateBuffer &next);
+    static Command* create(vector<string> args, 
+            bool is_dbg,
+            IntermediateBuffer &previous, 
+            IntermediateBuffer &next);
 
 public:
     CommandFactory();
     CommandFactory(const CommandFactory& orig) = delete;
     virtual ~CommandFactory();
     
-    static Command *createCommand(string cmd, vector<string> args, bool is_dbg);
+    static Command *createCommand(string cmd, 
+                    vector<string> args, 
+                    bool is_dbg,
+                    IntermediateBuffer &previous, 
+                    IntermediateBuffer &next);
 };
 
 

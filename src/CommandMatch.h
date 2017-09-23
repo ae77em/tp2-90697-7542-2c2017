@@ -15,19 +15,21 @@ class CommandMatch : public Command {
 private:
     string pattern;
 public:
-    CommandMatch();
-    CommandMatch(vector<string> args, bool is_dbg);
-    CommandMatch(const CommandMatch& orig) = delete;
+    CommandMatch(vector<string> args, 
+            bool is_dbg,
+            IntermediateBuffer &previous_buffer,
+            IntermediateBuffer &next_buffer);
     virtual ~CommandMatch();
     
-    void run();
+    void do_command();
     string to_string();
         
 protected:    
     void initialize();
     
 private:    
-    void do_match();
+    CommandMatch() = delete;
+    CommandMatch(const CommandMatch& orig) = delete;
 };
 
 #endif /* MATCH_H */

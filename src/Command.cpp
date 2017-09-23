@@ -1,9 +1,5 @@
 #include "Command.h"
 
-#include <string>
-#include <iostream>
-#include <fstream>
-#include <vector>
 #include <regex>
 
 using std::string;
@@ -12,14 +8,14 @@ using std::cin;
 using std::cerr;
 using std::vector;
 
-Command::Command() : Thread() {
-}
-
-Command::Command(const Command& orig) : Thread() {
-}
-
-Command::Command(vector<string> args, bool is_dbg)
-: arguments(args), is_debug(is_dbg) {
+Command::Command(vector<string> args,
+        bool is_dbg,
+        IntermediateBuffer &previous_buffer,
+        IntermediateBuffer &next_buffer
+        ) : arguments(args),
+is_debug(is_dbg),
+previous_buffer(previous_buffer),
+next_buffer(next_buffer) {
 }
 
 Command::~Command() {
@@ -27,18 +23,6 @@ Command::~Command() {
 
 void Command::initialize() {
     //  counter = InstantiationsCounter::instance()
-}
-
-void Command::wait_for_input() {
-    //    std::unique_lock<std::mutex> lk(my_mutex);
-    //    cv.wait(lk, [] {
-    //        return ready;
-    //    });
-    //
-    //    // acá tengo que procesar....
-    //
-    //    lk.unlock();
-    //    cv.notify_one();
 }
 
 string Command::get_wrong_params_size_msg(string command) {
@@ -52,7 +36,27 @@ void Command::print_pos_in_pipe() {
     }
 }
 
+void Command::set_buffer_is_ready(bool ir) {
+    buffer_is_ready = ir;
+}
+
+bool Command::is_ready() {
+    return buffer_is_ready;
+}
+
 void Command::run() {
+    while (previous_buffer.is_processing_yet()) {
+        std::unique_lock<std::mutex> lck(m);
+        cv.wait(lck, [this] {
+            return buffer_is_ready;
+        });
+
+        do_command();
+
+        lck.unlock();
+
+        next_buffer.add_intermediate_result(output);
+    }
 }
 
 string Command::to_string() {
@@ -120,4 +124,12 @@ string Command::get_output() const {
 
 void Command::set_output(string output) {
     this->output = output;
+}
+
+void Command::load_in_next_buffer(string str) {
+    this->next_buffer.add_intermediate_result(str);
+}
+
+string Command::get_from_previous_buffer() {
+    return this->previous_buffer.get_next_intermediate_result();
 }

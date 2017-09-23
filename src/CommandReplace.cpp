@@ -1,8 +1,5 @@
 #include "CommandReplace.h"
 
-#include <vector>
-#include <string>
-
 /*
  * Uso un singleton para contar la cantidad de comandos que ejecuté. Dejo la
  * la clase dentro de la misma implementación del comando ya que se usa sola-
@@ -38,36 +35,30 @@ private:
 /*
  * Implementación de la clase propiamente dicha.
  */
-CommandReplace::CommandReplace()
-: Command() {
-    initialize();
-}
-
-CommandReplace::CommandReplace(vector<string> args, bool is_dbg)
-: Command(args, is_dbg) {
-    initialize();
-}
-
-CommandReplace::~CommandReplace() {
-}
-
-void CommandReplace::initialize() {
-    int counter = CounterReplaceSingleton::instance().getIncrementedCounter();
-    set_counter(counter);
-}
-
-void CommandReplace::run() {
-    if (get_arguments().size() == 2) {
-        pattern = get_arguments().at(0);
-        replacement = get_arguments().at(1);
-        do_replace();
+CommandReplace::CommandReplace(vector<string> args,
+        bool is_dbg,
+        IntermediateBuffer &previous_buffer,
+        IntermediateBuffer &next_buffer)
+: Command(args, is_dbg, previous_buffer, next_buffer) {
+    if (arguments.size() == 2) {
+        initialize();
     } else {
         std::cerr << get_wrong_params_size_msg("replace");
         throw get_wrong_params_size_msg("replace");
     }
 }
 
-void CommandReplace::do_replace() {
+CommandReplace::~CommandReplace() {
+}
+
+void CommandReplace::initialize() {
+    int ctr = CounterReplaceSingleton::instance().getIncrementedCounter();
+    counter = ctr;
+    pattern = get_arguments().at(0);
+    replacement = get_arguments().at(1);
+}
+
+void CommandReplace::do_command() {
     print_cont();
     set_previous_buffer_for_debug();
     output = std::regex_replace(
