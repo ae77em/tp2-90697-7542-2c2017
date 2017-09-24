@@ -118,8 +118,8 @@ void Pipeline::run() {
     std::vector<Thread *> threads;
     Command *first_command = commands.front();
     Command *last_command = commands.back();
-    Reader *reader = new Reader(in, first_command->get_previous_buffer());
-    Writter *writter = new Writter(last_command->get_next_buffer(), out);
+    Reader *reader = new Reader(in, first_command->get_source_buffer());
+    Writter *writter = new Writter(last_command->get_dest_buffer(), out);
 
     threads.push_back(reader);
 

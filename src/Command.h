@@ -26,16 +26,13 @@ private:
     int pos_in_pipe = 0;
         
 protected:
-    mutex m;
-    condition_variable cv;
     string input;
     string output;
     vector<string> arguments;
     bool is_debug;
     int counter;
-    bool buffer_is_ready;
-    IntermediateBuffer &previous_buffer;
-    IntermediateBuffer &next_buffer;
+    IntermediateBuffer &source_buffer;
+    IntermediateBuffer &dest_buffer;
        
 public:
     Command(vector<string> args, 
@@ -45,15 +42,13 @@ public:
     virtual ~Command();
     
     void run();
+    
     virtual string to_string();
 
     vector<string> get_arguments() const;
-    void load_in_next_buffer(string str);
 
-    void set_buffer_is_ready(bool ir);
-    
-    IntermediateBuffer &get_previous_buffer();
-    IntermediateBuffer &get_next_buffer();
+    IntermediateBuffer &get_source_buffer();
+    IntermediateBuffer &get_dest_buffer();
 
 private:
     Command() = delete;
@@ -62,6 +57,9 @@ private:
 protected:
     virtual void do_command();
     void initialize();
+    
+    bool is_load_input_from_source_successful();
+    void load_dest_from_output();
         
     void print_cont();
     string get_wrong_params_size_msg(string command);

@@ -8,19 +8,16 @@
  * mente aquí adentro, y no justifica meterla en otro cpp.
  */
 class CounterMatchSingleton {
-
 public:
     static CounterMatchSingleton& instance() {
         static CounterMatchSingleton instance;
         return instance;
     }
 
-    int getIncrementedCounter() {
-        return ++counter;
-    }
+    int getIncrementedCounter() { return ++counter; }
 
 private:
-    CounterMatchSingleton() {}
+    CounterMatchSingleton() { }
 
 public:
     CounterMatchSingleton(CounterMatchSingleton const&) = delete;
@@ -60,12 +57,9 @@ string CommandMatch::to_string() {
 }
 
 void CommandMatch::do_command() {
-    print_cont();
-    set_previous_buffer_for_debug();
     if (std::regex_search(input, std::regex(pattern))) {
         output = input;
     } else {
         output = "";
     }
-    print_intermediate_buffer();
 }

@@ -5,6 +5,8 @@
 #include "IntermediateBuffer.h"
 
 #include <ostream>
+#include <mutex>
+#include <condition_variable>
 
 using std::ostream;
 
@@ -12,6 +14,9 @@ class Writter : public Thread {
 private:
     IntermediateBuffer &input;
     ostream &output;
+    
+    std::mutex m;
+    std::condition_variable cv;
 
 public:
     Writter(IntermediateBuffer &in, ostream &out);

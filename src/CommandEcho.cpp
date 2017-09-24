@@ -59,5 +59,5 @@ string CommandEcho::to_string() {
 }
 
 void CommandEcho::do_command() {
-    output = input = previous_buffer.get_next_intermediate_result();
+    output = input;
 }

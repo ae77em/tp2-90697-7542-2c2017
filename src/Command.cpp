@@ -14,8 +14,8 @@ Command::Command(vector<string> args,
         IntermediateBuffer &next_buffer
         ) : arguments(args),
 is_debug(is_dbg),
-previous_buffer(previous_buffer),
-next_buffer(next_buffer) {
+source_buffer(previous_buffer),
+dest_buffer(next_buffer) {
 }
 
 Command::~Command() {
@@ -40,36 +40,30 @@ void Command::print_pos_in_pipe() {
     }
 }
 
-void Command::run() {
-    while (previous_buffer.is_processing_yet()) {
-        std::unique_lock<std::mutex> lck(m);
-        cv.wait(lck, [this] {
-            return previous_buffer.has_output();
-        });
-
-        do_command();
-
-        lck.unlock();
-
-        next_buffer.add_intermediate_result(output);
-    }
-    next_buffer.set_previous_ended(true);
+bool Command::is_load_input_from_source_successful() {
+    return source_buffer.find_and_store_next_output(input);
 }
 
-void Command::set_buffer_is_ready(bool ir) {
-    buffer_is_ready = ir;
+void Command::run() {
+    while (source_buffer.is_processing_yet()) {
+        if (is_load_input_from_source_successful()) {
+            do_command();
+            load_dest_from_output();
+        }
+    }
+    dest_buffer.set_previous_ended(true);
 }
 
 string Command::to_string() {
     return "base command";
 }
 
-IntermediateBuffer &Command::get_previous_buffer() {
-    return previous_buffer;
+IntermediateBuffer &Command::get_source_buffer() {
+    return source_buffer;
 }
 
-IntermediateBuffer &Command::get_next_buffer() {
-    return next_buffer;
+IntermediateBuffer &Command::get_dest_buffer() {
+    return dest_buffer;
 }
 
 vector<string> Command::get_arguments() const {
@@ -110,6 +104,6 @@ void Command::set_intermediate_buffer(string intermediate_buffer) {
 
 }
 
-void Command::load_in_next_buffer(string str) {
-    this->next_buffer.add_intermediate_result(str);
+void Command::load_dest_from_output() {
+    this->dest_buffer.add_intermediate_result(output);
 }

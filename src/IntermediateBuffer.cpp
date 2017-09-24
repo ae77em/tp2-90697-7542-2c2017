@@ -1,3 +1,4 @@
+#include <iostream>
 #include "IntermediateBuffer.h"
 
 using std::string;
@@ -9,21 +10,40 @@ IntermediateBuffer::IntermediateBuffer() {
 IntermediateBuffer::~IntermediateBuffer() {
 }
 
-string IntermediateBuffer::get_next_intermediate_result() {
-    string first_element = "";
-    if (this->has_output()) {
-        first_element.assign(intermediate_results.front());
+bool IntermediateBuffer::find_and_store_next_output(string &result) {
+    bool was_processed = false;
+    unique_lock<mutex> lck(m);
+    cv.wait(lck, [this] {
+        return has_output() || is_ended();
+    });
+
+    if (has_output()) {
+        result.assign(intermediate_results.front());
         intermediate_results.pop();
+        was_processed = true;
     }
-    return first_element;
+
+    cv.notify_one();
+    lck.unlock();
+
+    return was_processed;
 }
 
 void IntermediateBuffer::add_intermediate_result(const string &s) {
+    unique_lock<mutex> lck(m);
+
     intermediate_results.push(s);
+
+    cv.notify_one();
+    lck.unlock();
 }
 
 bool IntermediateBuffer::is_processing_yet() const {
-    return !(previous_ended && intermediate_results.empty());
+    return !previous_ended || !intermediate_results.empty();
+}
+
+bool IntermediateBuffer::is_ended() const {
+    return previous_ended && intermediate_results.empty();
 }
 
 bool IntermediateBuffer::has_output() const {
@@ -31,5 +51,10 @@ bool IntermediateBuffer::has_output() const {
 }
 
 void IntermediateBuffer::set_previous_ended(bool ended) {
+    unique_lock<mutex> lck(m);
+
     previous_ended = ended;
+
+    cv.notify_one();
+    lck.unlock();
 }
