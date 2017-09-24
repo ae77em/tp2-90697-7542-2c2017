@@ -54,10 +54,6 @@ void CommandEcho::initialize() {
     set_counter(counter);
 }
 
-void CommandEcho::run() {
-    do_command();
-}
-
 string CommandEcho::to_string() {
     return "echo";
 }

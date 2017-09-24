@@ -25,8 +25,7 @@ Command* CommandFactory::create(vector<string> args,
         bool is_dbg,
         IntermediateBuffer &previous,
         IntermediateBuffer &next) {
-    //return new Command(args, is_dbg);
-    return NULL;
+    return new Command(args, is_dbg, previous, next);
 }
 
 Command* CommandFactory::createCommand(string cmd,
@@ -41,6 +40,6 @@ Command* CommandFactory::createCommand(string cmd,
     } else if (cmd.compare("match") == 0) {
         return createMatch(args, is_dbg, previous, next);
     } else {
-        return NULL; //create(args, is_dbg);
+        return create(args, is_dbg, previous, next);
     }
 }

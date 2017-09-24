@@ -1,4 +1,6 @@
 #include "Pipeline.h"
+#include "Reader.h"
+#include "Writter.h"
 
 using std::vector;
 using std::string;
@@ -24,7 +26,8 @@ input(&is, [](istream *) {
 })
 
 ,
-output(new std::ofstream(filename), std::default_delete<std::ostream>()),
+output(new std::ofstream(filename),
+        std::default_delete<std::ostream>()),
 is_debug(is_dbg) {
     if (!dynamic_cast<std::ofstream &> (*output).is_open()) {
         throw exception();
@@ -53,8 +56,10 @@ Pipeline::Pipeline(string ifilename,
         string ofilename,
         bool is_dbg = false,
         const string &cmds = "")
-: input(new std::ifstream(ifilename), std::default_delete<std::istream>()),
-output(new std::ofstream(ofilename), std::default_delete<std::ostream>()),
+: input(new std::ifstream(ifilename),
+std::default_delete<std::istream>()),
+output(new std::ofstream(ofilename),
+std::default_delete<std::ostream>()),
 is_debug(is_dbg) {
     if (!dynamic_cast<std::ifstream &> (*input).is_open()) {
         throw exception();
@@ -75,17 +80,21 @@ void Pipeline::initialize(const string &cmds) {
     string cmd;
     string entire_cmd;
 
-    IntermediateBuffer previous;
+    IntermediateBuffer *previous = new IntermediateBuffer();
 
     for (int i = 0; i < (int) cmds_list.size(); ++i) {
-        IntermediateBuffer next;
+        IntermediateBuffer *next = new IntermediateBuffer();
 
         entire_cmd = cmds_list.at(i);
         splitted_cmd = StringUtils::split(entire_cmd, PARAM_SEPARATOR);
         cmd = splitted_cmd.at(0);
         vector<string> args(splitted_cmd.begin() + 1, splitted_cmd.end());
 
-        Command *command = CommandFactory::createCommand(cmd, args, is_debug, previous, next);
+        Command *command = CommandFactory::createCommand(cmd,
+                args,
+                is_debug,
+                *previous,
+                *next);
 
         commands.push_back(command);
 
@@ -94,7 +103,7 @@ void Pipeline::initialize(const string &cmds) {
 }
 
 bool is_deleted(Command *command) {
-    delete command;
+    //delete command;
     return true;
 }
 
@@ -104,29 +113,29 @@ Pipeline::~Pipeline() {
 
 void Pipeline::run() {
     istream &in = dynamic_cast<istream &> (*input);
-    //ostream &out = dynamic_cast<ostream &> (*output);
+    ostream &out = dynamic_cast<ostream &> (*output);
 
-    string intermediate_buffer;
-    string current_input;
-    std::vector<Thread*> threads;
-    Command *command = commands.front();
+    std::vector<Thread *> threads;
+    Command *first_command = commands.front();
+    Command *last_command = commands.back();
+    Reader *reader = new Reader(in, first_command->get_previous_buffer());
+    Writter *writter = new Writter(last_command->get_next_buffer(), out);
 
-    while (std::getline(in, intermediate_buffer)) {
-        command->load_in_next_buffer(intermediate_buffer);
-    }
+    threads.push_back(reader);
 
     for (Command *c : commands) {
         threads.push_back(c);
     }
 
+    threads.push_back(writter);
+
     for (Thread *t : threads) {
         t->start();
     }
 
-    for (int i = 0; i < (int) commands.size(); ++i) {
+    int size = (int) threads.size();
+    for (int i = 0; i < size; ++i) {
         threads[i]->join();
         delete threads[i];
     }
-
-
 }

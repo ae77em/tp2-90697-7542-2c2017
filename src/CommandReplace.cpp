@@ -61,6 +61,7 @@ void CommandReplace::initialize() {
 void CommandReplace::do_command() {
     print_cont();
     set_previous_buffer_for_debug();
+    input = previous_buffer.get_next_intermediate_result();
     output = std::regex_replace(
             input,
             std::regex(pattern),

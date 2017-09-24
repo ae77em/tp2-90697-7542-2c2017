@@ -20,15 +20,18 @@ private:
             bool is_dbg,
             IntermediateBuffer &previous, 
             IntermediateBuffer &next);
+
     static CommandMatch* createMatch(vector<string> args, 
             bool is_dbg,
             IntermediateBuffer &previous, 
             IntermediateBuffer &next);
-    static CommandReplace* createReplace(vector<string> args, 
+
+    static CommandReplace* createReplace(vector<string> args,
             bool is_dbg,
             IntermediateBuffer &previous, 
             IntermediateBuffer &next);
-    static Command* create(vector<string> args, 
+
+    static Command* create(vector<string> args,
             bool is_dbg,
             IntermediateBuffer &previous, 
             IntermediateBuffer &next);

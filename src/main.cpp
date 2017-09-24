@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
     bool is_debug = false;
     string pipeline_params = "";
 
-    for (int i = 1; i < argc; i++) { // el 0 es el nombre del programa
+    for (int i = 1; i < argc; i++) {
         param = string(argv[i]);
 
         if (param.compare(OPT_INPUT) == 0) {

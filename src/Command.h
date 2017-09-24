@@ -47,24 +47,20 @@ public:
     void run();
     virtual string to_string();
 
-    bool get_is_debug() const;
-    void set_is_debug(bool is_debug);
     vector<string> get_arguments() const;
-    string get_input() const;
-    void set_input(string input);
-    string get_output() const;
-    void set_output(string output);
-    void set_buffer_is_ready(bool ir);
-    bool is_ready();    
     void load_in_next_buffer(string str);
-    string get_from_previous_buffer();
-        
+
+    void set_buffer_is_ready(bool ir);
+    
+    IntermediateBuffer &get_previous_buffer();
+    IntermediateBuffer &get_next_buffer();
+
 private:
     Command() = delete;
     Command(const Command& orig) = delete;
     
 protected:
-    virtual void do_command() = 0;
+    virtual void do_command();
     void initialize();
         
     void print_cont();

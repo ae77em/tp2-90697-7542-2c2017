@@ -19,7 +19,6 @@ public:
                 IntermediateBuffer &next_buffer);
     virtual ~CommandEcho();
     
-    void run();
     string to_string();
         
 protected:    

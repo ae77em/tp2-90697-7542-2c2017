@@ -8,9 +8,8 @@
  * mente aquí adentro, y no justifica meterla en otro cpp.
  */
 class CounterMatchSingleton {
-public:
-    // comentario para que ande cpplint
 
+public:
     static CounterMatchSingleton& instance() {
         static CounterMatchSingleton instance;
         return instance;
@@ -21,10 +20,7 @@ public:
     }
 
 private:
-    // comentario para que ande cpplint
-
-    CounterMatchSingleton() {
-    }
+    CounterMatchSingleton() {}
 
 public:
     CounterMatchSingleton(CounterMatchSingleton const&) = delete;

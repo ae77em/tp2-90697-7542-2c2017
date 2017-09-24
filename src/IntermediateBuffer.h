@@ -18,6 +18,7 @@ public:
     void add_intermediate_result(const string &s);
     bool is_processing_yet() const;
     bool has_output() const;
+    void set_previous_ended(bool ended);
 
 private:
     queue<string> intermediate_results;

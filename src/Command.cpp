@@ -22,7 +22,11 @@ Command::~Command() {
 }
 
 void Command::initialize() {
-    //  counter = InstantiationsCounter::instance()
+    // do nothing...hill
+}
+
+void Command::do_command() {
+    // do nothing...hill
 }
 
 string Command::get_wrong_params_size_msg(string command) {
@@ -36,19 +40,11 @@ void Command::print_pos_in_pipe() {
     }
 }
 
-void Command::set_buffer_is_ready(bool ir) {
-    buffer_is_ready = ir;
-}
-
-bool Command::is_ready() {
-    return buffer_is_ready;
-}
-
 void Command::run() {
     while (previous_buffer.is_processing_yet()) {
         std::unique_lock<std::mutex> lck(m);
         cv.wait(lck, [this] {
-            return buffer_is_ready;
+            return previous_buffer.has_output();
         });
 
         do_command();
@@ -57,10 +53,23 @@ void Command::run() {
 
         next_buffer.add_intermediate_result(output);
     }
+    next_buffer.set_previous_ended(true);
+}
+
+void Command::set_buffer_is_ready(bool ir) {
+    buffer_is_ready = ir;
 }
 
 string Command::to_string() {
     return "base command";
+}
+
+IntermediateBuffer &Command::get_previous_buffer() {
+    return previous_buffer;
+}
+
+IntermediateBuffer &Command::get_next_buffer() {
+    return next_buffer;
 }
 
 vector<string> Command::get_arguments() const {
@@ -94,42 +103,13 @@ void Command::set_counter(int counter) {
 }
 
 string Command::get_previous_buffer_data() const {
-    //    return previous_buffer.get_next_intermediate_result();
     return "";
 }
 
 void Command::set_intermediate_buffer(string intermediate_buffer) {
-    //    this->intermediate_buffer = intermediate_buffer;
-}
 
-bool Command::get_is_debug() const {
-    return is_debug;
-}
-
-void Command::set_is_debug(bool is_dbg) {
-    this->is_debug = is_dbg;
-}
-
-string Command::get_input() const {
-    return this->input;
-}
-
-void Command::set_input(string input) {
-    this->input = input;
-}
-
-string Command::get_output() const {
-    return this->output;
-}
-
-void Command::set_output(string output) {
-    this->output = output;
 }
 
 void Command::load_in_next_buffer(string str) {
     this->next_buffer.add_intermediate_result(str);
-}
-
-string Command::get_from_previous_buffer() {
-    return this->previous_buffer.get_next_intermediate_result();
 }
