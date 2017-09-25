@@ -1,5 +1,9 @@
 #include "Reader.h"
 
+#include <string>
+
+using std::string;
+
 Reader::Reader(istream &is, IntermediateBuffer &out)
 : input(is), output(out) {}
 

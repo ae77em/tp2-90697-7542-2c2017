@@ -1,7 +1,7 @@
 #include "CommandEcho.h"
 
-using std::mutex;
-using std::condition_variable;
+#include <vector>
+#include <string>
 
 /*
  * Uso un singleton para contar la cantidad de comandos que ejecuté. Dejo la
@@ -10,8 +10,6 @@ using std::condition_variable;
  */
 class CounterEchoSingleton {
 public:
-    // comentario para que ande cpplint
-
     static CounterEchoSingleton& instance() {
         static CounterEchoSingleton instance;
         return instance;
@@ -22,10 +20,7 @@ public:
     }
 
 private:
-    // comentario para que ande cpplint
-
-    CounterEchoSingleton() {
-    }
+    CounterEchoSingleton() { }
 
 public:
     CounterEchoSingleton(CounterEchoSingleton const&) = delete;

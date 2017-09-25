@@ -1,18 +1,17 @@
 #include "Command.h"
 
 #include <regex>
+#include <vector>
+#include <string>
 
 using std::string;
-using std::cout;
-using std::cin;
 using std::cerr;
 using std::vector;
 
 Command::Command(vector<string> args,
         bool is_dbg,
         IntermediateBuffer &previous_buffer,
-        IntermediateBuffer &next_buffer
-        ) : arguments(args),
+        IntermediateBuffer &next_buffer) : arguments(args),
 is_debug(is_dbg),
 source_buffer(previous_buffer),
 dest_buffer(next_buffer) {
@@ -100,9 +99,7 @@ string Command::get_previous_buffer_data() const {
     return "";
 }
 
-void Command::set_intermediate_buffer(string intermediate_buffer) {
-
-}
+void Command::set_intermediate_buffer(string intermediate_buffer) { }
 
 void Command::load_dest_from_output() {
     this->dest_buffer.add_intermediate_result(output);

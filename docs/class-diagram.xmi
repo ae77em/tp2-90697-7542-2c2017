@@ -436,7 +436,7 @@
         <UML:Attribute xmi.id="Uld2b03X2Rgn" name="input" isSpecification="false" visibility="private" type="za0PtkzkeEOZ"/>
         <UML:Attribute xmi.id="9Is59uo7UpUL" name="output" isSpecification="false" visibility="private" type="za0PtkzkeEOZ"/>
         <UML:Attribute xmi.id="XT6BgSkADNCo" name="is_debug" isSpecification="false" visibility="private" type="moSfD8mrdVQF"/>
-        <UML:Attribute xmi.id="yY1I4s9Jx1AP" name="commands" isSpecification="false" visibility="private" type="rgULTyf0Pl95"/>
+        <UML:Attribute xmi.id="yY1I4s9Jx1AP" name="threads" isSpecification="false" visibility="private" type="rgULTyf0Pl95"/>
         <UML:Operation xmi.id="k8LHysrrE22H" isLeaf="false" isRoot="false" name="Pipeline" isSpecification="false" visibility="public" isQuery="false" stereotype="constructor" isAbstract="false"/>
         <UML:Operation xmi.id="1IlNxNntvo9x" isLeaf="false" isRoot="false" name="Pipeline" isSpecification="false" visibility="public" isQuery="false" stereotype="constructor" isAbstract="false">
          <UML:BehavioralFeature.parameter>
@@ -479,7 +479,7 @@
         <UML:Operation xmi.id="Spgqr4eau2iW" isLeaf="false" isRoot="false" name="run" isSpecification="false" visibility="public" isQuery="false" isAbstract="false"/>
         <UML:Operation xmi.id="F651n7XbBqfy" isLeaf="false" isRoot="false" name="initialize" isSpecification="false" visibility="private" isQuery="false" isAbstract="false">
          <UML:BehavioralFeature.parameter>
-          <UML:Parameter xmi.id="FnsF8mzZbfPR" name="commands" isSpecification="false" value="" visibility="private" type="F7hiVMGQfWCl"/>
+          <UML:Parameter xmi.id="FnsF8mzZbfPR" name="threads" isSpecification="false" value="" visibility="private" type="F7hiVMGQfWCl"/>
          </UML:BehavioralFeature.parameter>
         </UML:Operation>
        </UML:Classifier.feature>

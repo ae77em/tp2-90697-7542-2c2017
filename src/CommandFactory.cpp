@@ -1,5 +1,8 @@
 #include "CommandFactory.h"
 
+#include <vector>
+#include <string>
+
 CommandEcho* CommandFactory::createEcho(vector<string> args,
         bool is_dbg,
         IntermediateBuffer &previous,

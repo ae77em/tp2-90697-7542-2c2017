@@ -33,6 +33,7 @@
 Makefile
 nbproject/
 src/tp
+src/tp-test.sh
 .idea/
 CMake*
 cmake*/

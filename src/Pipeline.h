@@ -4,6 +4,8 @@
 #include "CommandFactory.h"
 #include "StringUtils.h"
 #include "IntermediateBuffer.h"
+#include "Reader.h"
+#include "Writer.h"
 
 #include <string>
 #include <fstream>

@@ -1,10 +1,10 @@
 #include "Pipeline.h"
-#include "Reader.h"
-#include "Writter.h"
+
+#include <vector>
+#include <string>
 
 using std::vector;
 using std::string;
-using std::thread;
 
 Pipeline::Pipeline(istream &is = std::cin,
         ostream &os = std::cout,
@@ -119,7 +119,7 @@ void Pipeline::run() {
     Command *first_command = commands.front();
     Command *last_command = commands.back();
     Reader *reader = new Reader(in, first_command->get_source_buffer());
-    Writter *writter = new Writter(last_command->get_dest_buffer(), out);
+    Writer *writter = new Writer(last_command->get_dest_buffer(), out);
 
     threads.push_back(reader);
 

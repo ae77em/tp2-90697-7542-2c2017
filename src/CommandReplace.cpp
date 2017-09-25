@@ -1,5 +1,8 @@
 #include "CommandReplace.h"
 
+#include <string>
+#include <vector>
+
 /*
  * Uso un singleton para contar la cantidad de comandos que ejecuté.
  */
@@ -10,7 +13,9 @@ public:
         return instance;
     }
 
-    int getIncrementedCounter() { return ++counter; }
+    int getIncrementedCounter() {
+        return ++counter;
+    }
 
 private:
     CounterReplaceSingleton() { }
@@ -39,8 +44,7 @@ CommandReplace::CommandReplace(vector<string> args,
     }
 }
 
-CommandReplace::~CommandReplace() {
-}
+CommandReplace::~CommandReplace() { }
 
 void CommandReplace::initialize() {
     int ctr = CounterReplaceSingleton::instance().getIncrementedCounter();

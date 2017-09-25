@@ -7,32 +7,27 @@
 #include <ostream>
 #include <mutex>
 #include <condition_variable>
+#include <string>
 
 using std::ostream;
+using std::string;
 
-class Writter : public Thread {
+class Writer : public Thread {
 private:
     IntermediateBuffer &input;
     ostream &output;
-    
-    std::mutex m;
-    std::condition_variable cv;
 
 public:
-    Writter(IntermediateBuffer &in, ostream &out);
+    Writer(IntermediateBuffer &in, ostream &out);
 
-    virtual ~Writter();
+    virtual ~Writer();
 
     void run();
 
 private:
-    Writter() = delete;
+    Writer() = delete;
 
-    Writter(const Writter &orig) = delete;
-
+    Writer(const Writer &orig) = delete;
 };
-
-
-
 
 #endif /* WRITTER_H */

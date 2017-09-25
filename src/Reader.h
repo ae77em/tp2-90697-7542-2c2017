@@ -24,8 +24,5 @@ private:
     Reader() = delete;
 
     Reader(const Reader &orig) = delete;
-
 };
-
-
 #endif /* READER_H */

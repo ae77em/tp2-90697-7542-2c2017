@@ -1,8 +1,9 @@
-#include <iostream>
 #include "IntermediateBuffer.h"
 
+#include <iostream>
+#include <string>
+
 using std::string;
-using std::queue;
 
 IntermediateBuffer::IntermediateBuffer() {
 }
