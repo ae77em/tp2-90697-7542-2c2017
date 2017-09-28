@@ -33,7 +33,7 @@ private:
 /*
  * Implementación de la clase propiamente dicha.
  */
-CommandEcho::CommandEcho(vector<string> args,
+CommandEcho::CommandEcho(std::vector<std::string> args,
         bool is_dbg,
         IntermediateBuffer &previous_buffer,
         IntermediateBuffer &next_buffer,

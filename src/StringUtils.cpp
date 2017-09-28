@@ -29,7 +29,6 @@ std::vector<std::string> StringUtils::split(const std::string &s,
 
         if (next > last) {
             aResult = s.substr(last, next - last);
-            //aResult = trim(aResult);
             result.push_back(aResult);
         } else if (next > 0 && next == last && !is_finished){
             aResult = "";
@@ -39,20 +38,3 @@ std::vector<std::string> StringUtils::split(const std::string &s,
     }
     return result;
 }
-
-std::string StringUtils::ltrim(const std::string & str) {
-    const std::string pattern = " ";
-
-    return str.substr(str.find_first_not_of(pattern));
-}
-
-std::string StringUtils::rtrim(const std::string & str) {
-    const std::string pattern = " ";
-
-    return str.substr(0, str.find_last_not_of(pattern) + 1);
-}
-
-std::string StringUtils::trim(const std::string & str) {
-    return StringUtils::ltrim(StringUtils::rtrim(str));
-}
-

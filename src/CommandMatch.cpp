@@ -35,7 +35,7 @@ private:
 /*
  * Implementación de la clase propiamente dicha.
  */
-CommandMatch::CommandMatch(vector<string> args,
+CommandMatch::CommandMatch(std::vector<std::string> args,
         bool is_dbg,
         IntermediateBuffer &previous_buffer,
         IntermediateBuffer &next_buffer,

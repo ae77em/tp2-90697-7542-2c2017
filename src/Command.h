@@ -52,13 +52,8 @@ protected:
         
     std::string get_error_header();
     std::string get_wrong_params_size_msg(std::string command);
-    void print_pos_in_pipe();
-    void set_previous_buffer_for_debug();
-    
-    int get_counter() const;
+
     void set_counter(int counter);
-    std::string get_previous_buffer_data() const;
-    void set_intermediate_buffer(std::string intermediate_buffer);        
 };
 
 #endif /* COMMAND_H */

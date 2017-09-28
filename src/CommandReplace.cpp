@@ -32,7 +32,7 @@ private:
 /*
  * Implementación de la clase propiamente dicha.
  */
-CommandReplace::CommandReplace(vector<string> args,
+CommandReplace::CommandReplace(std::vector<std::string> args,
         bool is_dbg,
         IntermediateBuffer &previous_buffer,
         IntermediateBuffer &next_buffer,

@@ -6,14 +6,9 @@
 #include <string>
 #include <vector>
 
-using std::string;
-using std::vector;
-using std::ostream;
-using std::istream;
-
 class CommandEcho : public Command {
 public:
-    CommandEcho(vector<string> args, 
+    CommandEcho(std::vector<std::string> args,
                 bool is_dbg,
                 IntermediateBuffer &previous_buffer,
                 IntermediateBuffer &next_buffer, 

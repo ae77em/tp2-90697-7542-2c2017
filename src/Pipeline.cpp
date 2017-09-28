@@ -11,8 +11,8 @@
 using std::vector;
 using std::string;
 
-Pipeline::Pipeline(istream &is,
-        ostream &os,
+Pipeline::Pipeline(std::istream &is,
+                   std::ostream &os,
         bool is_dbg,
         const string &cmds)
 : input(is), output(os), is_debug(is_dbg) {

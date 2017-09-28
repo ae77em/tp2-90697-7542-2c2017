@@ -7,15 +7,12 @@
 #include <vector>
 #include <regex>
 
-using std::string;
-using std::vector;
-
 class CommandReplace : public Command {
     string pattern;
     string replacement;
     
 public:
-    CommandReplace(vector<string> args, 
+    CommandReplace(std::vector<std::string> args,
         bool is_dbg, 
         IntermediateBuffer &previous_buffer,
         IntermediateBuffer &next_buffer, 

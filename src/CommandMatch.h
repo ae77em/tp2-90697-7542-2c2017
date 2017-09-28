@@ -6,16 +6,11 @@
 #include <string>
 #include <vector>
 
-using std::string;
-using std::vector;
-using std::ostream;
-using std::istream;
-
 class CommandMatch : public Command {
 private:
     string pattern;
 public:
-    CommandMatch(vector<string> args, 
+    CommandMatch(std::vector<std::string> args,
             bool is_dbg,
             IntermediateBuffer &previous_buffer,
             IntermediateBuffer &next_buffer,

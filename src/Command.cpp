@@ -5,10 +5,7 @@
 #include <string>
 #include <iostream>
 
-using std::string;
-using std::vector;
-
-Command::Command(vector<string> args,
+Command::Command(std::vector<std::string> args,
         bool is_dbg,
         IntermediateBuffer &previous_buffer,
         IntermediateBuffer &next_buffer,
@@ -34,12 +31,6 @@ string Command::get_wrong_params_size_msg(string command) {
     return command + ": cantidad de parámetros incorrecta.";
 }
 
-void Command::print_pos_in_pipe() {
-    if (is_debug) {
-        pos_in_pipe++;
-        std::cerr << "(" << pos_in_pipe << ") ";
-    }
-}
 
 void Command::load_input_from_source() {
     input = source_buffer.find_and_store_next_output();
@@ -71,12 +62,12 @@ IntermediateBuffer &Command::get_dest_buffer() {
     return dest_buffer;
 }
 
-vector<string> Command::get_arguments() const {
+std::vector<std::string> Command::get_arguments() const {
     return arguments;
 }
 
 string Command::get_error_header() {
-    string header = "";
+    std::string header = "";
 
     header.append("(");
     header.append(std::to_string(pos_in_pipe));
@@ -97,19 +88,9 @@ void Command::load_error_buffer() {
     }
 }
 
-int Command::get_counter() const {
-    return counter;
-}
-
 void Command::set_counter(int counter) {
     this->counter = counter;
 }
-
-string Command::get_previous_buffer_data() const {
-    return "";
-}
-
-void Command::set_intermediate_buffer(string intermediate_buffer) { }
 
 void Command::load_dest_from_output() {
     this->dest_buffer.add_intermediate_result(output);
