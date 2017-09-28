@@ -1,16 +1,15 @@
 #include "Reader.h"
 
 #include <string>
+#include <istream>
 
-using std::string;
-
-Reader::Reader(istream &is, IntermediateBuffer &out)
+Reader::Reader(std::istream &is, IntermediateBuffer &out)
 : input(is), output(out) {}
 
 Reader::~Reader() { }
 
 void Reader::run() {
-    string buffer;
+    std::string buffer;
 
     while (std::getline(input, buffer)) {
         output.add_intermediate_result(buffer);

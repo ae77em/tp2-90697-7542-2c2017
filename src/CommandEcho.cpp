@@ -36,8 +36,9 @@ private:
 CommandEcho::CommandEcho(vector<string> args,
         bool is_dbg,
         IntermediateBuffer &previous_buffer,
-        IntermediateBuffer &next_buffer)
-: Command(args, is_dbg, previous_buffer, next_buffer) {
+        IntermediateBuffer &next_buffer,
+        int pos_in_pipe)
+: Command(args, is_dbg, previous_buffer, next_buffer, pos_in_pipe) {
     initialize();
 }
 

@@ -5,20 +5,15 @@
 #include "IntermediateBuffer.h"
 
 #include <ostream>
-#include <mutex>
-#include <condition_variable>
 #include <string>
-
-using std::ostream;
-using std::string;
 
 class Writer : public Thread {
 private:
     IntermediateBuffer &input;
-    ostream &output;
+    std::ostream &output;
 
 public:
-    Writer(IntermediateBuffer &in, ostream &out);
+    Writer(IntermediateBuffer &in, std::ostream &out);
 
     virtual ~Writer();
 

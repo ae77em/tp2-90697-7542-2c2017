@@ -3,46 +3,51 @@
 #include <vector>
 #include <string>
 
-CommandEcho* CommandFactory::createEcho(vector<string> args,
+CommandEcho* CommandFactory::createEcho(std::vector<std::string> args,
         bool is_dbg,
         IntermediateBuffer &previous,
-        IntermediateBuffer &next) {
-    return new CommandEcho(args, is_dbg, previous, next);
+        IntermediateBuffer &next,
+        int pos_in_pipe) {
+    return new CommandEcho(args, is_dbg, previous, next, pos_in_pipe);
 }
 
-CommandMatch* CommandFactory::createMatch(vector<string> args,
+CommandMatch* CommandFactory::createMatch(std::vector<std::string> args,
         bool is_dbg,
         IntermediateBuffer &previous,
-        IntermediateBuffer &next) {
-    return new CommandMatch(args, is_dbg, previous, next);
+        IntermediateBuffer &next,
+        int pos_in_pipe) {
+    return new CommandMatch(args, is_dbg, previous, next, pos_in_pipe);
 }
 
-CommandReplace* CommandFactory::createReplace(vector<string> args,
+CommandReplace* CommandFactory::createReplace(std::vector<std::string> args,
         bool is_dbg,
         IntermediateBuffer &previous,
-        IntermediateBuffer &next) {
-    return new CommandReplace(args, is_dbg, previous, next);
+        IntermediateBuffer &next,
+        int pos_in_pipe) {
+    return new CommandReplace(args, is_dbg, previous, next, pos_in_pipe);
 }
 
-Command* CommandFactory::create(vector<string> args,
+Command* CommandFactory::create(std::vector<std::string> args,
         bool is_dbg,
         IntermediateBuffer &previous,
-        IntermediateBuffer &next) {
-    return new Command(args, is_dbg, previous, next);
+        IntermediateBuffer &next,
+        int pos_in_pipe) {
+    return new Command(args, is_dbg, previous, next, pos_in_pipe);
 }
 
 Command* CommandFactory::createCommand(string cmd,
-        vector<string> args,
+        std::vector<std::string> args,
         bool is_dbg,
         IntermediateBuffer &previous,
-        IntermediateBuffer &next) {
+        IntermediateBuffer &next,
+        int pos_in_pipe) {
     if (cmd.compare("echo") == 0) {
-        return createEcho(args, is_dbg, previous, next);
+        return createEcho(args, is_dbg, previous, next, pos_in_pipe);
     } else if (cmd.compare("replace") == 0) {
-        return createReplace(args, is_dbg, previous, next);
+        return createReplace(args, is_dbg, previous, next, pos_in_pipe);
     } else if (cmd.compare("match") == 0) {
-        return createMatch(args, is_dbg, previous, next);
+        return createMatch(args, is_dbg, previous, next, pos_in_pipe);
     } else {
-        return create(args, is_dbg, previous, next);
+        return create(args, is_dbg, previous, next, pos_in_pipe);
     }
 }

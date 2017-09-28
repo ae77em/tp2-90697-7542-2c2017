@@ -5,50 +5,38 @@
 #include "IntermediateBuffer.h"
 
 #include <string>
-#include <fstream>
-#include <iostream>
-#include <memory>
 #include <vector>
-#include <mutex>
-#include <condition_variable>
-
-using std::istream;
-using std::ostream;
-using std::function;
-using std::string;
-using std::unique_ptr;
-using std::vector;
-using std::mutex;
-using std::condition_variable;
 
 class Command : public Thread {
-private:
-    int pos_in_pipe = 0;
-        
 protected:
-    string input;
-    string output;
-    vector<string> arguments;
+    int pos_in_pipe = 0;
+    std::string input = "";
+    std::string output = "";
+    std::string error = "";
+    std::vector<std::string> arguments;
     bool is_debug;
     int counter;
     IntermediateBuffer &source_buffer;
     IntermediateBuffer &dest_buffer;
-       
+           
 public:
-    Command(vector<string> args, 
+    Command(std::vector<std::string> args, 
             bool is_dbg, 
             IntermediateBuffer &previous_buffer,
-            IntermediateBuffer &next_buffer);
+            IntermediateBuffer &next_buffer,
+            int pos_in_pipe);
     virtual ~Command();
     
     void run();
     
-    virtual string to_string();
+    virtual std::string to_string();
 
-    vector<string> get_arguments() const;
+    std::vector<std::string> get_arguments() const;
 
     IntermediateBuffer &get_source_buffer();
     IntermediateBuffer &get_dest_buffer();
+    
+    std::string get_debug_text();
 
 private:
     Command() = delete;
@@ -56,21 +44,21 @@ private:
     
 protected:
     virtual void do_command();
+    virtual void load_error_buffer();
     void initialize();
     
-    bool is_load_input_from_source_successful();
+    void load_input_from_source();
     void load_dest_from_output();
         
-    void print_cont();
-    string get_wrong_params_size_msg(string command);
+    std::string get_error_header();
+    std::string get_wrong_params_size_msg(std::string command);
     void print_pos_in_pipe();
-    void print_intermediate_buffer();
     void set_previous_buffer_for_debug();
     
     int get_counter() const;
     void set_counter(int counter);
-    string get_previous_buffer_data() const;
-    void set_intermediate_buffer(string intermediate_buffer);        
+    std::string get_previous_buffer_data() const;
+    void set_intermediate_buffer(std::string intermediate_buffer);        
 };
 
 #endif /* COMMAND_H */

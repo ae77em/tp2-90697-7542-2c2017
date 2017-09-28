@@ -6,15 +6,13 @@
 
 #include <istream>
 
-using std::istream;
-
 class Reader : public Thread {
 private:
-    istream &input;
+    std::istream &input;
     IntermediateBuffer &output;
 
 public:
-    Reader(istream &is, IntermediateBuffer &out);
+    Reader(std::istream &is, IntermediateBuffer &out);
 
     virtual ~Reader();
 

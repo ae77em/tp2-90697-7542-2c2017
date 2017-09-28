@@ -18,7 +18,8 @@ public:
     CommandReplace(vector<string> args, 
         bool is_dbg, 
         IntermediateBuffer &previous_buffer,
-        IntermediateBuffer &next_buffer);
+        IntermediateBuffer &next_buffer, 
+        int pos_in_pipe);
     virtual ~CommandReplace();
     
     void do_command();

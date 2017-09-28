@@ -1,75 +1,21 @@
 #include "Pipeline.h"
 
+#include "StringUtils.h"
+#include "CommandFactory.h"
+#include "Reader.h"
+#include "Writer.h"
+
 #include <vector>
 #include <string>
 
 using std::vector;
 using std::string;
 
-Pipeline::Pipeline(istream &is = std::cin,
-        ostream &os = std::cout,
-        bool is_dbg = false,
-        const string &cmds = "")
-: input(&is, [](istream *) {
-}), output(&os, [](ostream *) {
-})
-
-, is_debug(is_dbg) {
-    initialize(cmds);
-}
-
 Pipeline::Pipeline(istream &is,
-        string filename,
-        bool is_dbg = false,
-        const string &cmds = "") :
-input(&is, [](istream *) {
-})
-
-,
-output(new std::ofstream(filename),
-        std::default_delete<std::ostream>()),
-is_debug(is_dbg) {
-    if (!dynamic_cast<std::ofstream &> (*output).is_open()) {
-        throw exception();
-    }
-
-    initialize(cmds);
-}
-
-Pipeline::Pipeline(string filename,
         ostream &os,
-        bool is_dbg = false,
-        const string &cmds = "") :
-input(new std::ifstream(filename), std::default_delete<std::istream>()),
-output(&os, [](ostream *) {
-})
-
-, is_debug(is_dbg) {
-    if (!dynamic_cast<std::ifstream &> (*input).is_open()) {
-        throw exception();
-    }
-
-    initialize(cmds);
-}
-
-Pipeline::Pipeline(string ifilename,
-        string ofilename,
-        bool is_dbg = false,
-        const string &cmds = "")
-: input(new std::ifstream(ifilename),
-std::default_delete<std::istream>()),
-output(new std::ofstream(ofilename),
-std::default_delete<std::ostream>()),
-is_debug(is_dbg) {
-    if (!dynamic_cast<std::ifstream &> (*input).is_open()) {
-        throw exception();
-    }
-
-    if (!dynamic_cast<std::ofstream &> (*output).is_open()) {
-        dynamic_cast<std::ifstream &> (*input).close();
-        throw exception();
-    }
-
+        bool is_dbg,
+        const string &cmds)
+: input(is), output(os), is_debug(is_dbg) {
     initialize(cmds);
 }
 
@@ -79,8 +25,10 @@ void Pipeline::initialize(const string &cmds) {
 
     string cmd;
     string entire_cmd;
+    int pos_in_pipe = 0;
 
     IntermediateBuffer *previous = new IntermediateBuffer();
+    buffers.push_back(previous);
 
     for (int i = 0; i < (int) cmds_list.size(); ++i) {
         IntermediateBuffer *next = new IntermediateBuffer();
@@ -90,36 +38,38 @@ void Pipeline::initialize(const string &cmds) {
         cmd = splitted_cmd.at(0);
         vector<string> args(splitted_cmd.begin() + 1, splitted_cmd.end());
 
+        if (is_debug){
+            pos_in_pipe = i + 1;
+        }
+
         Command *command = CommandFactory::createCommand(cmd,
                 args,
                 is_debug,
                 *previous,
-                *next);
+                *next,
+                pos_in_pipe);
 
         commands.push_back(command);
 
         previous = next;
+        buffers.push_back(previous);
     }
 }
 
-bool is_deleted(Command *command) {
-    //delete command;
-    return true;
-}
-
 Pipeline::~Pipeline() {
-    commands.remove_if(is_deleted);
+    for (IntermediateBuffer *ib : buffers){
+        delete ib;
+    }
+    buffers.clear();
+    commands.clear();
 }
 
 void Pipeline::run() {
-    istream &in = dynamic_cast<istream &> (*input);
-    ostream &out = dynamic_cast<ostream &> (*output);
-
-    std::vector<Thread *> threads;
+    vector<Thread *> threads;
     Command *first_command = commands.front();
     Command *last_command = commands.back();
-    Reader *reader = new Reader(in, first_command->get_source_buffer());
-    Writer *writter = new Writer(last_command->get_dest_buffer(), out);
+    Reader *reader = new Reader(input, first_command->get_source_buffer());
+    Writer *writer = new Writer(last_command->get_dest_buffer(), output);
 
     threads.push_back(reader);
 
@@ -127,15 +77,28 @@ void Pipeline::run() {
         threads.push_back(c);
     }
 
-    threads.push_back(writter);
+    threads.push_back(writer);
 
     for (Thread *t : threads) {
         t->start();
     }
 
     int size = (int) threads.size();
+    std::string err = "";
     for (int i = 0; i < size; ++i) {
         threads[i]->join();
+
+        if (is_debug){
+            if (i > 0 && i < size - 1){
+                Command *c = dynamic_cast<Command*>(threads[i]);
+                err = c->get_debug_text();
+                std::cerr << err;
+                if (i != size - 2){
+                    std::cerr << std::endl;
+                }
+            }
+        }
+
         delete threads[i];
     }
 }

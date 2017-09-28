@@ -9,46 +9,43 @@
 #include <string>
 #include <vector>
 
-using std::ostream;
-using std::istream;
-using std::string;
-using std::vector;
-
 class CommandFactory {
 private:
-    static CommandEcho* createEcho(vector<string> args, 
+    static CommandEcho* createEcho(std::vector<std::string> args, 
             bool is_dbg,
             IntermediateBuffer &previous, 
-            IntermediateBuffer &next);
+            IntermediateBuffer &next,
+            int pos_in_pipe);
 
-    static CommandMatch* createMatch(vector<string> args, 
+    static CommandMatch* createMatch(std::vector<std::string> args, 
             bool is_dbg,
             IntermediateBuffer &previous, 
-            IntermediateBuffer &next);
+            IntermediateBuffer &next,
+            int pos_in_pipe);
 
-    static CommandReplace* createReplace(vector<string> args,
+    static CommandReplace* createReplace(std::vector<std::string> args,
             bool is_dbg,
             IntermediateBuffer &previous, 
-            IntermediateBuffer &next);
+            IntermediateBuffer &next,
+            int pos_in_pipe);
 
-    static Command* create(vector<string> args,
+    static Command* create(std::vector<std::string> args,
             bool is_dbg,
             IntermediateBuffer &previous, 
-            IntermediateBuffer &next);
+            IntermediateBuffer &next,
+            int pos_in_pipe);
 
 public:
     CommandFactory();
     CommandFactory(const CommandFactory& orig) = delete;
     virtual ~CommandFactory();
     
-    static Command *createCommand(string cmd, 
-                    vector<string> args, 
+    static Command *createCommand(std::string cmd, 
+                    std::vector<std::string> args, 
                     bool is_dbg,
                     IntermediateBuffer &previous, 
-                    IntermediateBuffer &next);
+                    IntermediateBuffer &next,
+                    int pos_in_pipe);
 };
 
-
-
 #endif /* COMMANDFACTORY_H */
-

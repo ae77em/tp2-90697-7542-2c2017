@@ -1,10 +1,14 @@
 #include <cstdlib>
-#include <iostream>
 #include <string>
+#include <fstream>
+#include <iostream>
 
 #include "Pipeline.h"
 
 using std::istream;
+using std::ifstream;
+using std::ostream;
+using std::ofstream;
 using std::string;
 using std::cin;
 using std::cout;
@@ -16,6 +20,10 @@ using std::cout;
 int runPipeline(string, string, bool, string);
 
 int main(int argc, char** argv) {
+    if (argc <= 1){
+        return EXIT_FAILURE;
+    }
+
     string param;
     string input = "";
     string output = "";
@@ -47,15 +55,26 @@ int main(int argc, char** argv) {
 int runPipeline(string infile, string outfile, bool is_dbg, string params) {
     Pipeline *pipeline;
 
-    if (infile == "" && outfile == "") {
-        pipeline = new Pipeline(cin, cout, is_dbg, params);
-    } else if (infile != "" && outfile == "") {
-        pipeline = new Pipeline(infile, cout, is_dbg, params);
-    } else if (infile == "" && outfile != "") {
-        pipeline = new Pipeline(cin, outfile, is_dbg, params);
+    std::istream input(NULL);
+    std::ostream output(NULL);
+    std::ifstream ifile;
+    std::ofstream ofile;
+
+    if (infile == ""){
+        input.rdbuf(std::cin.rdbuf());
     } else {
-        pipeline = new Pipeline(infile, outfile, is_dbg, params);
+        ifile.open(infile.c_str(), std::ios_base::in);
+        input.rdbuf(ifile.rdbuf());
     }
+
+    if (outfile == ""){
+        output.rdbuf(std::cout.rdbuf());
+    } else {
+        ofile.open(outfile.c_str(), std::ios_base::out);
+        output.rdbuf(ofile.rdbuf());
+    }
+
+    pipeline = new Pipeline(input, output, is_dbg, params);
 
     pipeline->run();
     delete pipeline;

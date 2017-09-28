@@ -3,6 +3,7 @@
 #include <regex>
 #include <string>
 #include <vector>
+#include <iostream>
 
 /*
  * Uso un singleton para contar la cantidad de comandos que ejecuté. Dejo la
@@ -37,8 +38,9 @@ private:
 CommandMatch::CommandMatch(vector<string> args,
         bool is_dbg,
         IntermediateBuffer &previous_buffer,
-        IntermediateBuffer &next_buffer)
-: Command(args, is_dbg, previous_buffer, next_buffer) {
+        IntermediateBuffer &next_buffer,
+        int pos_in_pipe)
+: Command(args, is_dbg, previous_buffer, next_buffer, pos_in_pipe) {
     if (arguments.size() == 1) {
         initialize();
     } else {
@@ -65,5 +67,19 @@ void CommandMatch::do_command() {
         output = input;
     } else {
         output = "";
+    }
+}
+
+void CommandMatch::load_error_buffer(){
+    if (!input.empty()){
+        error.append(input);
+        error.append(" -> ");
+
+        if (output.empty()){
+            error.append("(Filtrado)");
+        } else {
+            error.append(output);
+        }
+        error.append("\n");
     }
 }

@@ -22,7 +22,7 @@ public:
     IntermediateBuffer(const IntermediateBuffer& orig);
     virtual ~IntermediateBuffer();
     
-    bool find_and_store_next_output(string &s);
+    string find_and_store_next_output();
     void add_intermediate_result(const string &s);
     bool is_processing_yet() const;
     bool has_output() const;

@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 /*
  * Uso un singleton para contar la cantidad de comandos que ejecuté.
@@ -34,8 +35,9 @@ private:
 CommandReplace::CommandReplace(vector<string> args,
         bool is_dbg,
         IntermediateBuffer &previous_buffer,
-        IntermediateBuffer &next_buffer)
-: Command(args, is_dbg, previous_buffer, next_buffer) {
+        IntermediateBuffer &next_buffer,
+        int pos_in_pipe)
+: Command(args, is_dbg, previous_buffer, next_buffer, pos_in_pipe) {
     if (arguments.size() == 2) {
         initialize();
     } else {

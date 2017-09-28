@@ -11,8 +11,9 @@ IntermediateBuffer::IntermediateBuffer() {
 IntermediateBuffer::~IntermediateBuffer() {
 }
 
-bool IntermediateBuffer::find_and_store_next_output(string &result) {
-    bool was_processed = false;
+string IntermediateBuffer::find_and_store_next_output() {
+    string result = "";
+    
     unique_lock<mutex> lck(m);
     cv.wait(lck, [this] {
         return has_output() || is_ended();
@@ -21,13 +22,12 @@ bool IntermediateBuffer::find_and_store_next_output(string &result) {
     if (has_output()) {
         result.assign(intermediate_results.front());
         intermediate_results.pop();
-        was_processed = true;
     }
 
     cv.notify_one();
     lck.unlock();
 
-    return was_processed;
+    return result;
 }
 
 void IntermediateBuffer::add_intermediate_result(const string &s) {

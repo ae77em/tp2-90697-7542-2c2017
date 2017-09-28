@@ -29,11 +29,11 @@ std::vector<std::string> StringUtils::split(const std::string &s,
 
         if (next > last) {
             aResult = s.substr(last, next - last);
-            aResult = trim(aResult);
-
-            if (aResult.compare("") != 0) {
-                result.push_back(aResult);
-            }
+            //aResult = trim(aResult);
+            result.push_back(aResult);
+        } else if (next > 0 && next == last && !is_finished){
+            aResult = "";
+            result.push_back(aResult);
         }
         last = next + delimiter.length();
     }

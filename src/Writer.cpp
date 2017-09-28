@@ -1,11 +1,9 @@
 #include "Writer.h"
 
-#include <iostream>
+#include <ostream>
 #include <string>
 
-using std::string;
-
-Writer::Writer(IntermediateBuffer &in, ostream &out)
+Writer::Writer(IntermediateBuffer &in, std::ostream &out)
 : input(in), output(out) {
 }
 
@@ -13,10 +11,11 @@ Writer::~Writer() {
 }
 
 void Writer::run() {
-    string result;
+    std::string result;
 
     while (input.is_processing_yet()) {
-        if (input.find_and_store_next_output(result)) {
+        result = input.find_and_store_next_output();
+        if (!result.empty()) {
             output << result << std::endl;
         }
     }

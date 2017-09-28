@@ -18,10 +18,12 @@ public:
     CommandMatch(vector<string> args, 
             bool is_dbg,
             IntermediateBuffer &previous_buffer,
-            IntermediateBuffer &next_buffer);
+            IntermediateBuffer &next_buffer,
+            int pos_in_pipe);
     virtual ~CommandMatch();
     
     void do_command();
+    void load_error_buffer();
     string to_string();
         
 protected:    
